@@ -21,8 +21,10 @@ await connectDB()
 //middleware
 app.use(express.json())
 app.use(cookieParser())
+
+
 app.use(cors({
-  origin: ["http://localhost:5173", "http://localhost:5174", "https://nextmart-nu6u.onrender.com"],
+  origin: ["http://localhost:5173", "http://localhost:5174", "https://nextmart-sigma.vercel.app" , "https://nextmart-admin.vercel.app"],
   credentials: true,
   methods: ["GET", "POST", "PUT", "DELETE"]
 }))
