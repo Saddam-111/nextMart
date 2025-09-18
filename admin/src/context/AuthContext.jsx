@@ -5,7 +5,7 @@ export const AuthDataContext = createContext()
 
 function AuthContext({children}){
 
-  const baseUrl = "http://localhost:3000"
+  const baseUrl = import.meta.env.VITE_BASE_URL
 
   const value = {
     baseUrl
