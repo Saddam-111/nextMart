@@ -9,7 +9,7 @@ import { FaBars, FaTimes } from "react-icons/fa";
 import { ShopDataContext } from "../context/ShopContext";
 
 const Navbar = () => {
-  const { userData, getCurrentUser, baseUrl } = useContext(userDataContext);
+  const { userData, getCurrentUser,setUserData, baseUrl } = useContext(userDataContext);
   const { showSearch, setShowSearch, search, setSearch, getCartCount } =
     useContext(ShopDataContext);
   const [showProfile, setShowProfile] = useState(false);
@@ -23,6 +23,7 @@ const Navbar = () => {
         withCredentials: true,
       });
       console.log(result.data);
+      setUserData(null)
       getCurrentUser();
     } catch (error) {
       console.log(error);

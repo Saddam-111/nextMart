@@ -5,7 +5,7 @@ import { FaEye, FaEyeSlash } from "react-icons/fa";
 import axios from "axios";
 import { AuthDataContext } from "../context/AuthContext";
 import { userDataContext } from "../context/UserContext";
-import { browserLocalPersistence, setPersistence, signInWithPopup } from "firebase/auth";
+import { signInWithPopup } from "firebase/auth";
 import { auth, provider } from "../../utils/Firebase";
 
 
