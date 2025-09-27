@@ -22,7 +22,7 @@ const Registration = () => {
       const result = await axios.post(baseUrl+'/api/v1/auth/register', {name, email, password}, {withCredentials: true})
       getCurrentUser()
       navigate('/')
-      console.log(result)
+      // console.log(result)
     } catch (error) {
       console.log(error)
     }
@@ -37,7 +37,7 @@ const Registration = () => {
       const email = user.email
 
       const result = await axios.post(baseUrl + '/api/v1/auth/googlelogin', {name, email}, {withCredentials: true})
-      console.log(result.data)
+      // console.log(result.data)
       getCurrentUser()
       navigate('/')
     } catch (error) {

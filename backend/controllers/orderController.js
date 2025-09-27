@@ -10,7 +10,7 @@ export const placeOrder = async (req, res) => {
     let { items, amount, address } = req.body;
     const userId = req.userId;
 
-    console.log("Order request body:", req.body);
+    //console.log("Order request body:", req.body);
 
     // Fallback mapping (in case frontend sends cartData instead of items)
     if (!items && req.body.cartData) {

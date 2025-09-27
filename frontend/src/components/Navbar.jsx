@@ -22,7 +22,7 @@ const Navbar = () => {
       const result = await axios.get(baseUrl + "/api/v1/auth/logout", {
         withCredentials: true,
       });
-      console.log(result.data);
+      //console.log(result.data);
       getCurrentUser();
     } catch (error) {
       console.log(error);

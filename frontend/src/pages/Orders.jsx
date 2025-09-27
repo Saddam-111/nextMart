@@ -17,7 +17,7 @@ const Orders = () => {
         {},
         { withCredentials: true }
       );
-      console.log(result.data)
+      // console.log(result.data)
 
       if (result.data) {
         let allOrdersItem = [];

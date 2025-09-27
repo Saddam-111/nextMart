@@ -40,7 +40,7 @@ const Add = () => {
         formData,
         { withCredentials: true }
       );
-      console.log(result.data);
+      //console.log(result.data);
 
       // Reset form
       setName("");

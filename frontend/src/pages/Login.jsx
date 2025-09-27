@@ -23,7 +23,7 @@ const Login = () => {
       const result = await axios.post(baseUrl+'/api/v1/auth/login', { email, password}, {withCredentials: true})
       getCurrentUser()
       navigate('/')
-      console.log(result)
+      //console.log(result)
     } catch (error) {
       console.log(error)
     }
@@ -37,7 +37,7 @@ const Login = () => {
         const email = user.email
   
         const result = await axios.post(baseUrl + '/api/v1/auth/googlelogin', {name, email}, {withCredentials: true})
-        console.log(result.data)
+        //console.log(result.data)
         getCurrentUser()
         navigate('/')
       } catch (error) {

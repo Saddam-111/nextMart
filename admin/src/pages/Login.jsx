@@ -18,7 +18,7 @@ const Login = () => {
       const result = await axios.post(baseUrl+'/api/v1/auth/adminLogin', { email, password}, {withCredentials: true})
       getAdmin()
       navigate('/')
-      console.log(result)
+      //console.log(result)
     } catch (error) {
       console.log(error)
     }

@@ -14,7 +14,7 @@ const Orders = () => {
         { withCredentials: true }
       );
       setOrders(result.data.reverse());
-      console.log(result.data)
+      //console.log(result.data)
     } catch (error) {
       console.log(error);
     }

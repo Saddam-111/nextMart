@@ -5,7 +5,7 @@ export const isAuth = async (req, res, next) => {
   try {
     const { token } = req.cookies;
 
-    console.log("Token in cookies:", token);  // Check if token is received
+    //console.log("Token in cookies:", token);  // Check if token is received
 
     if (!token) {
       return res.status(400).json({
@@ -23,7 +23,7 @@ export const isAuth = async (req, res, next) => {
     }
 
     req.userId = verifyToken.userId;
-    console.log("Verified userId:", req.userId);  // Log userId after token verification
+    //console.log("Verified userId:", req.userId);  // Log userId after token verification
 
     next();
   } catch (error) {

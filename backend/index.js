@@ -1,6 +1,7 @@
 import express from 'express'
 import dotenv from 'dotenv'
 import cors from 'cors'
+import rateLimit from 'express-rate-limit'
 import { connectDB } from './config/database.js'
 import cookieParser from 'cookie-parser'
 import { authRouter } from './routes/authRoute.js'
@@ -17,8 +18,15 @@ const port = process.env.PORT
 //database connection
 await connectDB()
 
+const limiter = rateLimit({
+  windowMs: 10*60*1000,
+  max: 50,
+  message: "Too may requests from this IP, please try again later."
+})
+
 
 //middleware
+app.use(limiter)
 app.use(express.json())
 app.use(cookieParser())
 
