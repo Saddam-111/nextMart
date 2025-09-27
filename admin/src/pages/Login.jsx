@@ -15,7 +15,7 @@ const Login = () => {
   const handleSignin = async (e) => {
     e.preventDefault()
     try {
-      const result = await axios.post(baseUrl+'/api/v1/auth/AdminLogin', { email, password}, {withCredentials: true})
+      const result = await axios.post(baseUrl+'/api/v1/auth/adminLogin', { email, password}, {withCredentials: true})
       getAdmin()
       navigate('/')
       console.log(result)
