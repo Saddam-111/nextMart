@@ -3,7 +3,7 @@ import { FaFacebookF, FaInstagram, FaTwitter, FaLinkedinIn } from "react-icons/f
 
 const Footer = () => {
   return (
-    <footer className="bg-gray-900 text-gray-300 px-6 md:px-16 py-10 mt-12">
+    <footer className="bg-gray-900 text-gray-300 px-6 md:px-16 pt-10 mt-12">
       <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
         {/* Brand Info */}
         <div>
@@ -49,7 +49,7 @@ const Footer = () => {
       </div>
 
       {/* Bottom */}
-      <div className="text-center text-sm text-gray-500 border-t border-gray-700 mt-10 pt-6">
+      <div className="text-center text-sm text-gray-500 border-t border-gray-700 mt-6 p-2">
         © {new Date().getFullYear()} NextMart. All rights reserved.
       </div>
     </footer>
