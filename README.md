@@ -142,7 +142,6 @@ markdown
 <img width="1920" height="1080" alt="Screenshot 2025-11-15 152652" src="https://github.com/user-attachments/assets/9e3a9f7a-34bd-493a-86a2-04997b24cca2" />
 
 ### 🛒 Product Details
-![Product Details](./screenshots/product-details.png)
 <img width="1920" height="1080" alt="Screenshot 2025-11-15 152721" src="https://github.com/user-attachments/assets/43552c20-8611-4aab-8717-b55971689299" />
 <img width="1920" height="1080" alt="Screenshot 2025-11-15 152738" src="https://github.com/user-attachments/assets/63a5fbcf-9437-4e46-be34-a6a468681b8f" />
 
@@ -152,12 +151,10 @@ markdown
 
 
 ### 🛠 Admin Panel
-![Admin](./screenshots/admin-dashboard.png)
 <img width="1920" height="1080" alt="Screenshot 2025-11-15 153014" src="https://github.com/user-attachments/assets/3953fb15-28a0-41b7-a4dc-df71dc3e6db1" />
 <img width="1920" height="1080" alt="Screenshot 2025-11-15 152957" src="https://github.com/user-attachments/assets/65b77c14-37b2-4a2e-8e36-3fe735c5c171" />
 <img width="1920" height="1080" alt="Screenshot 2025-11-15 152939" src="https://github.com/user-attachments/assets/540dbb9f-2dbb-4e35-87e7-9399dbd2a8ec" />
 
-```
 
 ---
 
