@@ -2,93 +2,100 @@ import React, { useContext, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import axios from "axios";
-import  { AuthDataContext } from "../context/AuthContext";
+import { AuthDataContext } from "../context/AuthContext";
 import { AdminDataContext } from "../context/AdminContext";
+import { motion } from "framer-motion";
 
 const Login = () => {
   const navigate = useNavigate();
-  const [showPassword, setShowPassword] = useState(false)
-  const {baseUrl} = useContext(AuthDataContext)
-  const [email, setEmail] = useState("")
-  const [password, setPassword] = useState("")
-  const {adminData, getAdmin} = useContext(AdminDataContext)
+  const [showPassword, setShowPassword] = useState(false);
+  const { baseUrl } = useContext(AuthDataContext);
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const { getAdmin } = useContext(AdminDataContext);
+
   const handleSignin = async (e) => {
-    e.preventDefault()
+    e.preventDefault();
     try {
-      const result = await axios.post(baseUrl+'/api/v1/auth/adminLogin', { email, password}, {withCredentials: true})
-      getAdmin()
-      navigate('/')
-      //console.log(result)
+      await axios.post(baseUrl + "/api/v1/auth/adminLogin", { email, password }, { withCredentials: true });
+      getAdmin();
+      navigate("/");
     } catch (error) {
-      console.log(error)
+      console.error(error);
     }
-  }
-
-
-
+  };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-100 p-4">
-      <div className="w-full max-w-md bg-white rounded-2xl shadow-lg p-6">
-        {/* Logo */}
-        <h1 className="text-3xl font-bold text-indigo-800 text-center mb-4">
-          nextMart <span>Admin</span>
-        </h1>
+    <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      className="min-h-screen flex items-center justify-center bg-[#f3efe8] p-4"
+    >
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5 }}
+        className="w-full max-w-md bg-[#fdfbf7] rounded-3xl shadow-lg p-8"
+      >
+        <motion.h1
+          whileHover={{ scale: 1.02 }}
+          className="text-3xl font-display font-semibold text-[#5e5240] text-center mb-6"
+        >
+          nextMart <span className="text-[#6b7d56]">Admin</span>
+        </motion.h1>
 
-        {/* Header */}
         <div className="text-center mb-6">
-          <span className="block text-xl font-semibold text-gray-800">
+          <span className="block text-xl font-display font-semibold text-[#3d352b]">
             Login
           </span>
-          <span className="block text-gray-500">
-            Welcome back to <span className="text-indigo-700">nextMart Admin</span>
+          <span className="block text-[#7a6b54]">
+            Welcome back to <span className="text-[#6b7d56]">nextMart Admin</span>
           </span>
         </div>
 
-        {/* Form */}
         <form onSubmit={handleSignin} className="space-y-4">
-
-          {/* Divider */}
-          
-
-          {/* Inputs */}
           <div className="space-y-3">
-            <input
+            <motion.input
+              whileFocus={{ scale: 1.01 }}
               type="email"
               placeholder="Email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               required
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none"
+              className="w-full px-4 py-3 border border-[#d9cec0] rounded-xl bg-white text-[#5e5240] placeholder-[#b39f87] focus:outline-none focus:border-[#6b7d56] focus:ring-2 focus:ring-[#6b7d56]/20 transition-all font-body"
             />
 
             <div className="relative">
-              <input
+              <motion.input
+                whileFocus={{ scale: 1.01 }}
                 type={showPassword ? "text" : "password"}
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 placeholder="Password"
                 required
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none"
+                className="w-full px-4 py-3 border border-[#d9cec0] rounded-xl bg-white text-[#5e5240] placeholder-[#b39f87] focus:outline-none focus:border-[#6b7d56] focus:ring-2 focus:ring-[#6b7d56]/20 transition-all font-body"
               />
-              <span
+              <button
+                type="button"
                 onClick={() => setShowPassword(!showPassword)}
-                className="absolute right-3 top-2.5 text-gray-600 cursor-pointer"
+                className="absolute right-3 top-3.5 text-[#7a6b54] cursor-pointer hover:text-[#5e5240]"
               >
                 {showPassword ? <FaEyeSlash /> : <FaEye />}
-              </span>
+              </button>
             </div>
 
-            <button
+            <motion.button
+              whileHover={{ scale: 1.03 }}
+              whileTap={{ scale: 0.97 }}
               type="submit"
-              className="w-full bg-indigo-700 hover:bg-indigo-800 text-white py-2 rounded-lg font-medium transition"
+              className="w-full bg-[#6b7d56] hover:bg-[#5d6446] text-white py-3 rounded-xl font-medium transition-colors"
             >
               Login
-            </button>
+            </motion.button>
           </div>
         </form>
-      </div>
-    </div>
+      </motion.div>
+    </motion.div>
   );
 };
 

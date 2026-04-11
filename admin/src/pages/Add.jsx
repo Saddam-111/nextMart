@@ -2,6 +2,7 @@ import React, { useContext, useState } from "react";
 import { images } from "../assets/asset";
 import axios from "axios";
 import { AuthDataContext } from "../context/AuthContext";
+import { motion } from "framer-motion";
 
 const Add = () => {
   const { baseUrl } = useContext(AuthDataContext);
@@ -23,7 +24,7 @@ const Add = () => {
 
   const handleAdd = async (e) => {
     e.preventDefault();
-    setLoading(true); // start loading
+    setLoading(true);
     try {
       const formData = new FormData();
       formData.append("name", name);
@@ -35,14 +36,10 @@ const Add = () => {
       formData.append("sizes", JSON.stringify(sizes));
       imagesState.forEach((img, i) => formData.append(`image${i + 1}`, img));
 
-      const result = await axios.post(
-        baseUrl + "/api/v1/product/addProduct",
-        formData,
-        { withCredentials: true }
-      );
-      //console.log(result.data);
+      await axios.post(baseUrl + "/api/v1/product/addProduct", formData, {
+        withCredentials: true,
+      });
 
-      // Reset form
       setName("");
       setDescription("");
       setImagesState([false, false, false, false]);
@@ -52,36 +49,43 @@ const Add = () => {
       setSubCategory("TopWear");
       setSizes([]);
     } catch (error) {
-      console.log(error);
+      console.error(error);
     } finally {
-      setLoading(false); // stop loading
+      setLoading(false);
     }
   };
 
   const sizeOptions = ["S", "M", "L", "XL", "XXL"];
 
   return (
-    <div className="w-full max-w-5xl mx-auto p-6 overflow-auto">
-      {/* Card Container */}
-      <div className="bg-white shadow-2xl rounded-2xl overflow-hidden">
-        {/* Header */}
-        <div className="bg-gradient-to-r from-blue-600 to-blue-800 p-6">
-          <h2 className="text-3xl font-bold text-white">Add New Product</h2>
-          <p className="text-gray-200 mt-1">
-            Fill all the details to add a product
-          </p>
-        </div>
+    <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      className="w-full max-w-5xl mx-auto p-6 overflow-auto"
+    >
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        className="bg-[#fdfbf7] shadow-2xl rounded-3xl overflow-hidden"
+      >
+        <motion.div
+          initial={{ opacity: 0, x: -20 }}
+          animate={{ opacity: 1, x: 0 }}
+          className="bg-gradient-to-r from-[#6b7d56] to-[#5d6446] p-6"
+        >
+          <h2 className="text-3xl font-display font-bold text-white">Add New Product</h2>
+          <p className="text-[#e8e0d3] mt-1">Fill all the details to add a product</p>
+        </motion.div>
 
-        {/* Form */}
         <form onSubmit={handleAdd} className="p-6 space-y-6">
-          {/* Image Upload */}
           <div>
-            <p className="text-gray-700 font-semibold mb-2">Upload Images</p>
+            <p className="text-[#5e5240] font-display font-semibold mb-2">Upload Images</p>
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
               {imagesState.map((img, i) => (
-                <label
+                <motion.label
                   key={i}
-                  className="cursor-pointer relative border-2 border-dashed border-gray-300 rounded-xl overflow-hidden hover:border-blue-600 transition"
+                  whileHover={{ scale: 1.02 }}
+                  className="cursor-pointer relative border-2 border-dashed border-[#d9cec0] rounded-xl overflow-hidden hover:border-[#6b7d56] transition"
                 >
                   <img
                     src={!img ? images.upload : URL.createObjectURL(img)}
@@ -94,34 +98,32 @@ const Add = () => {
                     onChange={(e) => handleImageChange(i, e.target.files[0])}
                   />
                   {!img && (
-                    <span className="absolute inset-0 flex items-center justify-center text-gray-400 font-semibold">
+                    <span className="absolute inset-0 flex items-center justify-center text-[#9e866b] font-semibold">
                       Click to upload
                     </span>
                   )}
-                </label>
+                </motion.label>
               ))}
             </div>
           </div>
 
-          {/* Product Name */}
           <div>
-            <p className="text-gray-700 font-semibold mb-1">Product Name</p>
-            <input
+            <p className="text-[#5e5240] font-display font-semibold mb-1">Product Name</p>
+            <motion.input
+              whileFocus={{ scale: 1.01 }}
               type="text"
-              className="w-full border border-gray-300 p-3 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-600 transition"
+              className="w-full border border-[#d9cec0] p-3 rounded-xl focus:outline-none focus:border-[#6b7d56] focus:ring-2 focus:ring-[#6b7d56]/20 transition font-body"
               value={name}
               onChange={(e) => setName(e.target.value)}
               placeholder="Enter product name"
             />
           </div>
 
-          {/* Description */}
           <div>
-            <p className="text-gray-700 font-semibold mb-1">
-              Product Description
-            </p>
-            <textarea
-              className="w-full border border-gray-300 p-3 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-600 transition"
+            <p className="text-[#5e5240] font-display font-semibold mb-1">Product Description</p>
+            <motion.textarea
+              whileFocus={{ scale: 1.01 }}
+              className="w-full border border-[#d9cec0] p-3 rounded-xl focus:outline-none focus:border-[#6b7d56] focus:ring-2 focus:ring-[#6b7d56]/20 transition font-body"
               value={description}
               onChange={(e) => setDescription(e.target.value)}
               rows="4"
@@ -129,53 +131,56 @@ const Add = () => {
             />
           </div>
 
-          {/* Category & Subcategory */}
           <div className="flex flex-col md:flex-row gap-4">
             <div className="flex-1">
-              <p className="text-gray-700 font-semibold mb-1">Category</p>
-              <select
-                className="w-full border border-gray-300 p-3 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-600 transition"
+              <p className="text-[#5e5240] font-display font-semibold mb-1">Category</p>
+              <motion.select
+                whileFocus={{ scale: 1.01 }}
+                className="w-full border border-[#d9cec0] p-3 rounded-xl focus:outline-none focus:border-[#6b7d56] transition font-body"
                 value={category}
                 onChange={(e) => setCategory(e.target.value)}
               >
                 <option value="Men">Men</option>
                 <option value="Women">Women</option>
                 <option value="Kids">Kids</option>
-              </select>
+              </motion.select>
             </div>
             <div className="flex-1">
-              <p className="text-gray-700 font-semibold mb-1">Sub Category</p>
-              <select
-                className="w-full border border-gray-300 p-3 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-600 transition"
+              <p className="text-[#5e5240] font-display font-semibold mb-1">Sub Category</p>
+              <motion.select
+                whileFocus={{ scale: 1.01 }}
+                className="w-full border border-[#d9cec0] p-3 rounded-xl focus:outline-none focus:border-[#6b7d56] transition font-body"
                 value={subCategory}
                 onChange={(e) => setSubCategory(e.target.value)}
               >
                 <option value="TopWear">TopWear</option>
                 <option value="BottomWear">BottomWear</option>
                 <option value="WinterWear">WinterWear</option>
-              </select>
+              </motion.select>
             </div>
           </div>
 
-          {/* Price */}
           <div>
-            <p className="text-gray-700 font-semibold mb-1">Product Price</p>
-            <input
+            <p className="text-[#5e5240] font-display font-semibold mb-1">Product Price</p>
+            <motion.input
+              whileFocus={{ scale: 1.01 }}
               type="number"
-              className="w-full border border-gray-300 p-3 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-600 transition"
+              className="w-full border border-[#d9cec0] p-3 rounded-xl focus:outline-none focus:border-[#6b7d56] focus:ring-2 focus:ring-[#6b7d56]/20 transition font-body"
               value={price}
               onChange={(e) => setPrice(e.target.value)}
               placeholder="₹ 200"
             />
           </div>
 
-          {/* Sizes */}
           <div>
-            <p className="text-gray-700 font-semibold mb-2">Product Sizes</p>
+            <p className="text-[#5e5240] font-display font-semibold mb-2">Product Sizes</p>
             <div className="flex flex-wrap gap-2">
               {sizeOptions.map((size) => (
-                <div
+                <motion.button
                   key={size}
+                  type="button"
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
                   onClick={() =>
                     setSizes((prev) =>
                       prev.includes(size)
@@ -185,44 +190,43 @@ const Add = () => {
                   }
                   className={`px-4 py-2 border rounded-xl cursor-pointer font-medium text-sm transition ${
                     sizes.includes(size)
-                      ? "bg-blue-600 text-white border-blue-600"
-                      : "border-gray-300 text-gray-700 hover:border-blue-600 hover:text-blue-600"
+                      ? "bg-[#6b7d56] text-white border-[#6b7d56]"
+                      : "border-[#d9cec0] text-[#5e5240] hover:border-[#6b7d56] hover:text-[#6b7d56]"
                   }`}
                 >
                   {size}
-                </div>
+                </motion.button>
               ))}
             </div>
           </div>
 
-          {/* Best Seller */}
           <div className="flex items-center gap-3">
-            <input
+            <motion.input
+              whileTap={{ scale: 1.1 }}
               type="checkbox"
               checked={bestSeller}
               onChange={() => setBestSeller((prev) => !prev)}
-              className="w-5 h-5 accent-blue-600"
+              className="w-5 h-5 accent-[#6b7d56]"
             />
-            <label className="text-gray-700 font-medium">
-              Add to Best Seller
-            </label>
+            <label className="text-[#5e5240] font-medium">Add to Best Seller</label>
           </div>
 
-          {/* Submit */}
-          <button
+          <motion.button
+            whileHover={{ scale: 1.02 }}
+            whileTap={{ scale: 0.98 }}
             type="submit"
             disabled={loading}
             className={`w-full py-3 rounded-xl font-semibold transition ${
               loading
-                ? "bg-gray-400 text-white cursor-not-allowed"
-                : "bg-gradient-to-r from-blue-600 to-blue-800 text-white hover:from-blue-700 hover:to-blue-900"
+                ? "bg-[#d9cec0] text-[#9e866b] cursor-not-allowed"
+                : "bg-[#6b7d56] text-white hover:bg-[#5d6446]"
             }`}
           >
             {loading ? "Adding Product..." : "Add Product"}
-          </button>
+          </motion.button>
         </form>
-      </div>
-    </div>
+      </motion.div>
+    </motion.div>
   );
 };
 

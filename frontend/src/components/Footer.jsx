@@ -1,57 +1,132 @@
 import React from "react";
 import { FaFacebookF, FaInstagram, FaTwitter, FaLinkedinIn } from "react-icons/fa";
+import { motion } from "framer-motion";
 
 const Footer = () => {
+  const currentYear = new Date().getFullYear();
+
+  const footerLinks = [
+    { label: "Home", path: "/" },
+    { label: "Collections", path: "/collection" },
+    { label: "About Us", path: "/about" },
+    { label: "Contact", path: "/contact" },
+  ];
+
+  const policyLinks = [
+    { label: "Privacy Policy", path: "/" },
+    { label: "Refund Policy", path: "/" },
+    { label: "Terms & Conditions", path: "/" },
+    { label: "Shipping Info", path: "/" },
+  ];
+
+  const socialLinks = [
+    { icon: FaFacebookF, path: "/", label: "Facebook" },
+    { icon: FaInstagram, path: "/", label: "Instagram" },
+    { icon: FaTwitter, path: "/", label: "Twitter" },
+    { icon: FaLinkedinIn, path: "/", label: "LinkedIn" },
+  ];
+
   return (
-    <footer className="bg-gray-900 text-gray-300 px-6 md:px-16 pt-10 mt-12">
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
-        {/* Brand Info */}
-        <div>
-          <h2 className="text-xl font-bold text-white mb-4">NextMart</h2>
-          <p className="text-sm leading-relaxed">
+    <footer className="bg-[#3d352b] text-[#d9cec0] px-6 md:px-16 pt-12 mt-12">
+      <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-4 gap-10">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.5 }}
+        >
+          <h2 className="text-2xl font-display font-semibold text-[#f3efe8] mb-4">
+            NextMart
+          </h2>
+          <p className="text-sm leading-relaxed text-[#b39f87]">
             Your one-stop shop for trendy fashion and lifestyle products.  
             We deliver quality and trust at your doorstep.
           </p>
-        </div>
+        </motion.div>
 
-        {/* Links */}
-        <div>
-          <h3 className="text-lg font-semibold text-white mb-3">Quick Links</h3>
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.5, delay: 0.1 }}
+        >
+          <h3 className="text-lg font-display font-semibold text-[#f3efe8] mb-3">
+            Quick Links
+          </h3>
           <ul className="space-y-2 text-sm">
-            <li><a href="/" className="hover:text-white">Home</a></li>
-            <li><a href="/collection" className="hover:text-white">Collections</a></li>
-            <li><a href="/about" className="hover:text-white">About Us</a></li>
-            <li><a href="/contact" className="hover:text-white">Contact</a></li>
+            {footerLinks.map((link, index) => (
+              <li key={index}>
+                <motion.a
+                  href={link.path}
+                  whileHover={{ x: 4, color: "#f3efe8" }}
+                  className="hover:text-[#f3efe8] transition-colors"
+                >
+                  {link.label}
+                </motion.a>
+              </li>
+            ))}
           </ul>
-        </div>
+        </motion.div>
 
-        {/* Policies */}
-        <div>
-          <h3 className="text-lg font-semibold text-white mb-3">Policies</h3>
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.5, delay: 0.2 }}
+        >
+          <h3 className="text-lg font-display font-semibold text-[#f3efe8] mb-3">
+            Policies
+          </h3>
           <ul className="space-y-2 text-sm">
-            <li><a href="/" className="hover:text-white">Privacy Policy</a></li>
-            <li><a href="/" className="hover:text-white">Refund Policy</a></li>
-            <li><a href="/" className="hover:text-white">Terms & Conditions</a></li>
-            <li><a href="/" className="hover:text-white">Shipping Info</a></li>
+            {policyLinks.map((link, index) => (
+              <li key={index}>
+                <motion.a
+                  href={link.path}
+                  whileHover={{ x: 4, color: "#f3efe8" }}
+                  className="hover:text-[#f3efe8] transition-colors"
+                >
+                  {link.label}
+                </motion.a>
+              </li>
+            ))}
           </ul>
-        </div>
+        </motion.div>
 
-        {/* Social Media */}
-        <div>
-          <h3 className="text-lg font-semibold text-white mb-3">Follow Us</h3>
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.5, delay: 0.3 }}
+        >
+          <h3 className="text-lg font-display font-semibold text-[#f3efe8] mb-3">
+            Follow Us
+          </h3>
           <div className="flex gap-4">
-            <a href="/" className="hover:text-white"><FaFacebookF /></a>
-            <a href="/" className="hover:text-white"><FaInstagram /></a>
-            <a href="/" className="hover:text-white"><FaTwitter /></a>
-            <a href="/" className="hover:text-white"><FaLinkedinIn /></a>
+            {socialLinks.map((social, index) => (
+              <motion.a
+                key={index}
+                href={social.path}
+                aria-label={social.label}
+                whileHover={{ scale: 1.1, y: -2 }}
+                whileTap={{ scale: 0.95 }}
+                className="w-10 h-10 flex items-center justify-center rounded-full bg-[#5e5240] hover:bg-[#6b7d56] transition-colors"
+              >
+                <social.icon size={18} />
+              </motion.a>
+            ))}
           </div>
-        </div>
+        </motion.div>
       </div>
 
-      {/* Bottom */}
-      <div className="text-center text-sm text-gray-500 border-t border-gray-700 mt-6 p-2">
-        © {new Date().getFullYear()} NextMart. All rights reserved.
-      </div>
+      <motion.div
+        initial={{ opacity: 0 }}
+        whileInView={{ opacity: 1 }}
+        viewport={{ once: true }}
+        transition={{ duration: 0.5, delay: 0.4 }}
+        className="text-center text-sm text-[#9e866b] border-t border-[#5e5240] mt-10 py-4"
+      >
+        © {currentYear} NextMart. All rights reserved.
+      </motion.div>
     </footer>
   );
 };

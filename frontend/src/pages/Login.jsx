@@ -7,132 +7,138 @@ import { AuthDataContext } from "../context/AuthContext";
 import { userDataContext } from "../context/UserContext";
 import { signInWithPopup } from "firebase/auth";
 import { auth, provider } from "../../utils/Firebase";
-
-
+import { motion } from "framer-motion";
 
 const Login = () => {
   const navigate = useNavigate();
-  const [showPassword, setShowPassword] = useState(false)
-  const {baseUrl} = useContext(AuthDataContext)
-  const [email, setEmail] = useState("")
-  const [password, setPassword] = useState("")
-  const {getCurrentUser} = useContext(userDataContext)
+  const [showPassword, setShowPassword] = useState(false);
+  const { baseUrl } = useContext(AuthDataContext);
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const { getCurrentUser } = useContext(userDataContext);
+
   const handleSignin = async (e) => {
-    e.preventDefault()
+    e.preventDefault();
     try {
-      const result = await axios.post(baseUrl+'/api/v1/auth/login', { email, password}, {withCredentials: true})
-      getCurrentUser()
-      navigate('/')
-      //console.log(result)
+      await axios.post(baseUrl + "/api/v1/auth/login", { email, password }, { withCredentials: true });
+      getCurrentUser();
+      navigate("/");
     } catch (error) {
-      console.log(error)
+      console.error(error);
     }
-  }
+  };
 
   const googleLogin = async () => {
-      try {
-        const response = await signInWithPopup(auth,provider)
-        const user = response.user
-        const name = user.displayName;
-        const email = user.email
-  
-        const result = await axios.post(baseUrl + '/api/v1/auth/googlelogin', {name, email}, {withCredentials: true})
-        //console.log(result.data)
-        getCurrentUser()
-        navigate('/')
-      } catch (error) {
-        console.log(error)
-      }
+    try {
+      const response = await signInWithPopup(auth, provider);
+      const user = response.user;
+      const name = user.displayName;
+      const email = user.email;
+      await axios.post(baseUrl + "/api/v1/auth/googlelogin", { name, email }, { withCredentials: true });
+      getCurrentUser();
+      navigate("/");
+    } catch (error) {
+      console.error(error);
     }
-
-
-
+  };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-100 p-4">
-      <div className="w-full max-w-md bg-white rounded-2xl shadow-lg p-6">
-        {/* Logo */}
-        <h1 className="text-3xl font-bold text-indigo-800 text-center mb-4">
+    <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      className="min-h-screen flex items-center justify-center bg-[#f3efe8] p-4"
+    >
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5 }}
+        className="w-full max-w-md bg-[#fdfbf7] rounded-3xl shadow-lg p-8"
+      >
+        <motion.h1
+          whileHover={{ scale: 1.02 }}
+          className="text-3xl font-display font-semibold text-[#5e5240] text-center mb-6"
+        >
           nextMart
-        </h1>
+        </motion.h1>
 
-        {/* Header */}
         <div className="text-center mb-6">
-          <span className="block text-xl font-semibold text-gray-800">
-            Login Page
+          <span className="block text-xl font-display font-semibold text-[#3d352b]">
+            Welcome Back
           </span>
-          <span className="block text-gray-500">
-            Welcome back to <span className="text-indigo-700">nextMart</span>
+          <span className="block text-[#7a6b54] mt-1">
+            Sign in to continue to <span className="text-[#6b7d56]">nextMart</span>
           </span>
         </div>
 
-        {/* Form */}
         <form onSubmit={handleSignin} className="space-y-4">
-          {/* Google Sign In */}
-          <button
-            onClick={googleLogin}
+          <motion.button
+            whileHover={{ scale: 1.02 }}
+            whileTap={{ scale: 0.98 }}
             type="button"
-            className="w-full flex items-center justify-center gap-2 bg-red-500 hover:bg-red-600 text-white py-2 rounded-lg font-medium transition"
+            onClick={googleLogin}
+            className="w-full flex items-center justify-center gap-2 bg-[#5e5240] hover:bg-[#4a4536] text-white py-3 rounded-xl font-medium transition-colors"
           >
-            <FaGoogle /> Login with Google
-          </button>
+            <FaGoogle /> Continue with Google
+          </motion.button>
 
-          {/* Divider */}
           <div className="flex items-center my-4">
-            <div className="flex-1 h-px bg-gray-300"></div>
-            <span className="px-2 text-gray-500 text-sm">OR</span>
-            <div className="flex-1 h-px bg-gray-300"></div>
+            <div className="flex-1 h-px bg-[#d9cec0]"></div>
+            <span className="px-3 text-[#9e866b] text-sm">OR</span>
+            <div className="flex-1 h-px bg-[#d9cec0]"></div>
           </div>
 
-          {/* Inputs */}
           <div className="space-y-3">
-            <input
+            <motion.input
+              whileFocus={{ scale: 1.01 }}
               type="email"
               placeholder="Email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               required
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none"
+              className="w-full px-4 py-3 border border-[#d9cec0] rounded-xl bg-white text-[#5e5240] placeholder-[#b39f87] focus:outline-none focus:border-[#6b7d56] focus:ring-2 focus:ring-[#6b7d56]/20 transition-all"
             />
 
             <div className="relative">
-              <input
+              <motion.input
+                whileFocus={{ scale: 1.01 }}
                 type={showPassword ? "text" : "password"}
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 placeholder="Password"
                 required
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none"
+                className="w-full px-4 py-3 border border-[#d9cec0] rounded-xl bg-white text-[#5e5240] placeholder-[#b39f87] focus:outline-none focus:border-[#6b7d56] focus:ring-2 focus:ring-[#6b7d56]/20 transition-all"
               />
-              <span
+              <button
+                type="button"
                 onClick={() => setShowPassword(!showPassword)}
-                className="absolute right-3 top-2.5 text-gray-600 cursor-pointer"
+                className="absolute right-3 top-3.5 text-[#7a6b54] cursor-pointer hover:text-[#5e5240]"
               >
                 {showPassword ? <FaEyeSlash /> : <FaEye />}
-              </span>
+              </button>
             </div>
 
-            <button
+            <motion.button
+              whileHover={{ scale: 1.03 }}
+              whileTap={{ scale: 0.97 }}
               type="submit"
-              className="w-full bg-indigo-700 hover:bg-indigo-800 text-white py-2 rounded-lg font-medium transition"
+              className="w-full bg-[#6b7d56] hover:bg-[#5d6446] text-white py-3 rounded-xl font-medium transition-colors"
             >
-              Login
-            </button>
+              Sign In
+            </motion.button>
           </div>
         </form>
 
-        {/* Footer */}
-        <p className="text-center text-sm text-gray-600 mt-4">
-          Don’t have an account?{" "}
+        <p className="text-center text-sm text-[#7a6b54] mt-6 font-body">
+          Don't have an account?{" "}
           <span
             onClick={() => navigate("/signup")}
-            className="text-amber-500 hover:underline cursor-pointer"
+            className="text-[#9e866b] hover:underline cursor-pointer font-medium"
           >
             Register here
           </span>
         </p>
-      </div>
-    </div>
+      </motion.div>
+    </motion.div>
   );
 };
 

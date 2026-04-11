@@ -1,6 +1,7 @@
 import React, { useContext, useEffect, useState } from "react";
 import { AuthDataContext } from "../context/AuthContext";
 import axios from "axios";
+import { motion, AnimatePresence } from "framer-motion";
 
 const Lists = () => {
   const [list, setList] = useState([]);
@@ -25,7 +26,7 @@ const Lists = () => {
         { withCredentials: true }
       );
       if (result.data) {
-        fetchList(); // refresh after delete
+        fetchList();
       } else {
         console.warn("Failed to remove Product");
       }
@@ -39,53 +40,83 @@ const Lists = () => {
   }, [baseUrl]);
 
   return (
-    <div className="p-6 mb-10">
+    <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      className="p-6 mb-10"
+    >
       {list?.length > 0 ? (
-        <div className="overflow-x-auto ">
-          <table className="min-w-full border border-gray-300 bg-white shadow-md">
-            <thead className="bg-gray-100 ">
+        <div className="overflow-x-auto">
+          <motion.table
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="min-w-full border border-[#d9cec0] bg-[#fdfbf7] rounded-2xl overflow-hidden"
+          >
+            <thead className="bg-[#f3efe8]">
               <tr>
-                <th className="border px-4 py-2 text-left ">S.No</th>
-                <th className="border px-4 py-2 text-left">Image</th>
-                <th className="border px-4 py-2 text-left">Name</th>
-                <th className="border px-4 py-2 text-left">Category</th>
-                <th className="border px-4 py-2 text-left">Price</th>
-                <th className="border px-4 py-2 text-left ">Action</th>
+                <th className="border border-[#d9cec0] px-4 py-3 text-left font-display text-[#5e5240]">S.No</th>
+                <th className="border border-[#d9cec0] px-4 py-3 text-left font-display text-[#5e5240]">Image</th>
+                <th className="border border-[#d9cec0] px-4 py-3 text-left font-display text-[#5e5240]">Name</th>
+                <th className="border border-[#d9cec0] px-4 py-3 text-left font-display text-[#5e5240]">Category</th>
+                <th className="border border-[#d9cec0] px-4 py-3 text-left font-display text-[#5e5240]">Price</th>
+                <th className="border border-[#d9cec0] px-4 py-3 text-left font-display text-[#5e5240]">Action</th>
               </tr>
             </thead>
             <tbody>
-              {list.map((item, index) => (
-                <tr key={item._id} className="hover:bg-gray-50">
-                  <td className="border px-4 py-2">{index + 1}</td>
-                  <td className="border px-4 py-2">
-                    <img
-                      src={item.image1.url}
-                      alt={item.name}
-                      className="h-14 w-14 object-cover rounded-md"
-                    />
-                  </td>
-                  <td className="border px-4 py-2 font-medium">{item.name}</td>
-                  <td className="border px-4 py-2">{item.category}</td>
-                  <td className="border px-4 py-2 text-blue-600 font-semibold">
-                    ₹{item.price}
-                  </td>
-                  <td className="border px-4 py-2">
-                    <button
-                      onClick={() => removeList(item._id)}
-                      className="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600"
-                    >
-                      Remove
-                    </button>
-                  </td>
-                </tr>
-              ))}
+              <AnimatePresence>
+                {list.map((item, index) => (
+                  <motion.tr
+                    key={item._id}
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, x: -100 }}
+                    transition={{ duration: 0.3, delay: index * 0.05 }}
+                    className="hover:bg-[#f3efe8]"
+                  >
+                    <td className="border border-[#d9cec0] px-4 py-3">{index + 1}</td>
+                    <td className="border border-[#d9cec0] px-4 py-3">
+                      <motion.img
+                        whileHover={{ scale: 1.1 }}
+                        src={item.image1.url}
+                        alt={item.name}
+                        className="h-14 w-14 object-cover rounded-xl"
+                      />
+                    </td>
+                    <td className="border border-[#d9cec0] px-4 py-3 font-medium text-[#5e5240]">
+                      {item.name}
+                    </td>
+                    <td className="border border-[#d9cec0] px-4 py-3 text-[#7a6b54]">
+                      {item.category}
+                    </td>
+                    <td className="border border-[#d9cec0] px-4 py-3 text-[#6b7d56] font-semibold">
+                      ₹{item.price}
+                    </td>
+                    <td className="border border-[#d9cec0] px-4 py-3">
+                      <motion.button
+                        whileHover={{ scale: 1.05 }}
+                        whileTap={{ scale: 0.95 }}
+                        onClick={() => removeList(item._id)}
+                        className="bg-[#965639] text-white px-3 py-1.5 rounded-xl hover:bg-[#7a4b2e] transition-colors"
+                      >
+                        Remove
+                      </motion.button>
+                    </td>
+                  </motion.tr>
+                ))}
+              </AnimatePresence>
             </tbody>
-          </table>
+          </motion.table>
         </div>
       ) : (
-        <div className="text-gray-600">No Products available</div>
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          className="text-[#7a6b54] text-center py-12"
+        >
+          No Products available
+        </motion.div>
       )}
-    </div>
+    </motion.div>
   );
 };
 

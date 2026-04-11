@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useContext } from "react";
 import axios from "axios";
 import { AuthDataContext } from "../context/AuthContext";
+import { motion } from "framer-motion";
 
 const Home = () => {
   const [totalProduct, setTotalProduct] = useState(0);
@@ -9,13 +10,13 @@ const Home = () => {
 
   const fetchCount = async () => {
     try {
-      const products = await axios.get(baseUrl + '/api/v1/product/list', { withCredentials: true });
+      const products = await axios.get(baseUrl + "/api/v1/product/list", { withCredentials: true });
       setTotalProduct(products.data.length);
 
-      const orders = await axios.get(baseUrl + '/api/v1/order/orderList', { withCredentials: true });
+      const orders = await axios.get(baseUrl + "/api/v1/order/orderList", { withCredentials: true });
       setTotalOrder(orders.data.length);
     } catch (error) {
-      console.error('Failed to fetch count', error);
+      console.error("Failed to fetch count", error);
     }
   };
 
@@ -23,18 +24,33 @@ const Home = () => {
     fetchCount();
   }, []);
 
-  return (
-    <div className="flex flex-wrap justify-center gap-6 p-6">
-      <div className="bg-white p-6 rounded-lg shadow-lg w-64 text-center">
-        <h3 className="text-lg font-semibold text-gray-700">Total Products</h3>
-        <p className="mt-4 text-3xl font-bold text-blue-600">{totalProduct}</p>
-      </div>
+  const stats = [
+    { title: "Total Products", value: totalProduct, color: "text-[#6b7d56]" },
+    { title: "Total Orders", value: totalOrder, color: "text-[#965639]" },
+  ];
 
-      <div className="bg-white p-6 rounded-lg shadow-lg w-64 text-center">
-        <h3 className="text-lg font-semibold text-gray-700">Total Orders</h3>
-        <p className="mt-4 text-3xl font-bold text-blue-600">{totalOrder}</p>
-      </div>
-    </div>
+  return (
+    <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      className="flex flex-wrap justify-center gap-6 p-6"
+    >
+      {stats.map((stat, index) => (
+        <motion.div
+          key={stat.title}
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: index * 0.1 }}
+          whileHover={{ y: -6 }}
+          className="bg-[#fdfbf7] p-6 rounded-3xl shadow-lg w-64 text-center organic-card"
+        >
+          <h3 className="text-lg font-display font-semibold text-[#5e5240]">{stat.title}</h3>
+          <p className={`mt-4 text-3xl font-display font-bold ${stat.color}`}>
+            {stat.value}
+          </p>
+        </motion.div>
+      ))}
+    </motion.div>
   );
 };
 

@@ -14,7 +14,7 @@ export const adminAuth = async (req , res, next) => {
         message: "Admin doesn't have token"
       })
     }
-    req.adminEmail = process.env.ADMIN_EMAIL
+    req.adminEmail = verifyToken.email
     next()
   } catch (error) {
     return res.status(500).json({

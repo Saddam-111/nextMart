@@ -1,78 +1,122 @@
 import React, { useEffect, useState } from "react";
 import { banners } from "../assets/asset";
 import { FaArrowLeft, FaArrowRight } from "react-icons/fa";
+import { motion, AnimatePresence } from "framer-motion";
+
+const heroVariants = {
+  enter: (direction) => ({
+    x: direction > 0 ? "100%" : "-100%",
+    opacity: 0,
+  }),
+  center: {
+    x: 0,
+    opacity: 1,
+  },
+  exit: (direction) => ({
+    x: direction < 0 ? "100%" : "-100%",
+    opacity: 0,
+  }),
+};
+
+const textVariants = {
+  initial: { opacity: 0, y: 30 },
+  animate: { 
+    opacity: 1, 
+    y: 0,
+    transition: { duration: 0.8, ease: "easeOut" }
+  },
+};
 
 const Hero = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
+  const [direction, setDirection] = useState(0);
 
   const prevSlide = () => {
-    setCurrentIndex((prev) =>
-      prev === 0 ? banners.length - 1 : prev - 1
-    );
+    setDirection(-1);
+    setCurrentIndex((prev) => (prev === 0 ? banners.length - 1 : prev - 1));
   };
 
   const nextSlide = () => {
-    setCurrentIndex((prev) =>
-      prev === banners.length - 1 ? 0 : prev + 1
-    );
+    setDirection(1);
+    setCurrentIndex((prev) => (prev === banners.length - 1 ? 0 : prev + 1));
   };
 
-   // Auto Slide Effect
   useEffect(() => {
     const interval = setInterval(() => {
-      setCurrentIndex((prev) =>
-        prev === banners.length - 1 ? 0 : prev + 1
-      );
-    }, 3000); // change every 3 seconds
+      setDirection(1);
+      setCurrentIndex((prev) => (prev === banners.length - 1 ? 0 : prev + 1));
+    }, 5000);
 
-    return () => clearInterval(interval); // cleanup
+    return () => clearInterval(interval);
   }, []);
 
   return (
-    <div className="relative w-[90%] mx-auto h-[30vh] md:h-[35vh] lg:h-[45vh] bg-gray-100 overflow-hidden mt-[70px]">
-      {/* Images */}
-      <div
-        className="flex transition-transform ease-in-out duration-700 h-full"
-        style={{ transform: `translateX(-${currentIndex * 100}%)` }}
-      >
-        {banners.map((banner, index) => (
+    <div className="relative w-[90%] mx-auto h-[30vh] md:h-[35vh] lg:h-[45vh] overflow-hidden mt-[70px] rounded-3xl">
+      <AnimatePresence initial={false} mode="wait" custom={direction}>
+        <motion.div
+          key={currentIndex}
+          custom={direction}
+          variants={heroVariants}
+          initial="enter"
+          animate="center"
+          exit="exit"
+          transition={{
+            x: { type: "spring", stiffness: 300, damping: 30 },
+            opacity: { duration: 0.4 },
+          }}
+          className="absolute inset-0 w-full h-full"
+        >
           <img
-            src={banner}
-            key={index}
-            className="w-full flex-shrink-0 object-contain h-full"
-            alt={`banner-${index}`}
+            src={banners[currentIndex]}
+            className="w-full h-full object-cover"
+            alt={`banner-${currentIndex}`}
           />
-        ))}
-      </div>
+        </motion.div>
+      </AnimatePresence>
 
-      {/* Left Arrow */}
-      <button
+      <motion.button
+        initial={{ opacity: 0, x: -20 }}
+        animate={{ opacity: 1, x: 0 }}
+        whileHover={{ scale: 1.1, backgroundColor: "#5e5240" }}
+        whileTap={{ scale: 0.9 }}
         onClick={prevSlide}
-        className="absolute top-1/2 left-4 transform -translate-y-1/2 bg-white p-2 rounded-full shadow-md hover:bg-indigo-600 hover:text-white transition"
+        className="absolute top-1/2 left-4 -translate-y-1/2 bg-white/90 backdrop-blur-sm p-3 rounded-full shadow-lg hover:text-white transition-colors z-10"
       >
-        <FaArrowLeft />
-      </button>
+        <FaArrowLeft className="text-[#5e5240]" />
+      </motion.button>
 
-      {/* Right Arrow */}
-      <button
+      <motion.button
+        initial={{ opacity: 0, x: 20 }}
+        animate={{ opacity: 1, x: 0 }}
+        whileHover={{ scale: 1.1, backgroundColor: "#5e5240" }}
+        whileTap={{ scale: 0.9 }}
         onClick={nextSlide}
-        className="absolute top-1/2 right-4 transform -translate-y-1/2 bg-white p-2 rounded-full shadow-md hover:bg-indigo-600 hover:text-white transition"
+        className="absolute top-1/2 right-4 -translate-y-1/2 bg-white/90 backdrop-blur-sm p-3 rounded-full shadow-lg hover:text-white transition-colors z-10"
       >
-        <FaArrowRight />
-      </button>
+        <FaArrowRight className="text-[#5e5240]" />
+      </motion.button>
 
-      {/* Dots */}
-      <div className="absolute bottom-5 left-1/2 transform -translate-x-1/2 flex gap-3">
+      <div className="absolute bottom-5 left-1/2 -translate-x-1/2 flex gap-3 z-10">
         {banners.map((_, index) => (
-          <div
+          <motion.button
             key={index}
-            onClick={() => setCurrentIndex(index)}
-            className={`w-3 h-3 rounded-full cursor-pointer transition ${
-              index === currentIndex
-                ? "bg-indigo-600 scale-125"
-                : "bg-gray-300 hover:bg-gray-400"
+            onClick={() => {
+              setDirection(index > currentIndex ? 1 : -1);
+              setCurrentIndex(index);
+            }}
+            className={`relative h-3 rounded-full transition-all duration-300 ${
+              index === currentIndex ? "w-8 bg-[#5e5240]" : "w-3 bg-white/70"
             }`}
-          ></div>
+            whileHover={{ scale: 1.2 }}
+          >
+            {index === currentIndex && (
+              <motion.div
+                layoutId="activeDot"
+                className="absolute inset-0 bg-[#5e5240] rounded-full"
+                transition={{ type: "spring", stiffness: 500, damping: 30 }}
+              />
+            )}
+          </motion.button>
         ))}
       </div>
     </div>

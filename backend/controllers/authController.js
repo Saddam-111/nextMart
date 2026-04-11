@@ -176,19 +176,19 @@ export const logOut = async (req, res) => {
 export const adminLogin = async (req , res) => {
   try {
     const {email, password} = req.body
-    if(email ===process.env.ADMIN_EMAIL && password === process.env.ADMIN_PASSWORD){
+    if(email === process.env.ADMIN_EMAIL && password === process.env.ADMIN_PASSWORD){
       
       const token = await generateAdminToken(email)
       res.cookie("adminToken", token, {
       httpOnly: true,
-      secure: true,
-      sameSite: "None",
+      sameSite: "Lax",
       path: "/",
       maxAge: 1*24*60*60*1000
     })
 
-    return res.status(200).json(token)
+    return res.status(200).json({ message: "Login successful" })
     }
+    return res.status(401).json({ message: "Invalid credentials" })
   } catch (error) {
     return res.status(500).json({
       message: "Invalid credentials"
@@ -201,8 +201,7 @@ export const adminLogOut = async (req, res) => {
   try {
     res.clearCookie("adminToken", {
       httpOnly: true,
-      secure: true,
-      sameSite: "None",
+      sameSite: "Lax",
       path: "/"
     });
     return res.status(200).json({ message: "Admin logged out successfully" });
