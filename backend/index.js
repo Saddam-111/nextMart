@@ -54,7 +54,7 @@ const authLimiter = rateLimit({
 });
 
 app.use(cors({
-  origin: ["http://localhost:5173", "https://nextmart-sigma.vercel.app", "https://nextmart-admin.vercel.app"],
+  origin: ["http://localhost:5173", "https://nextmart-sigma.vercel.app"],
   credentials: true,
   methods: ["GET", "POST", "PUT", "DELETE"]
 }));
