@@ -1,66 +1,57 @@
-import User from "../models/userModel.js";
+﻿import User from "../models/userModel.js";
 import validator from 'validator';
 import bcrypt from 'bcrypt';
 import { generateAdminToken, generateToken } from "../config/token.js";
+
+let adminPasswordHashCache = null;
+
+async function getAdminPasswordHash() {
+  if (adminPasswordHashCache) return adminPasswordHashCache;
+
+  if (process.env.ADMIN_PASSWORD_HASH) {
+    adminPasswordHashCache = process.env.ADMIN_PASSWORD_HASH;
+  } else if (process.env.ADMIN_PASSWORD) {
+    adminPasswordHashCache = await bcrypt.hash(process.env.ADMIN_PASSWORD, 10);
+  } else {
+    throw new Error('Admin credentials not configured');
+  }
+  return adminPasswordHashCache;
+}
 
 export const register = async (req, res) => {
   try {
     const { name, email, password } = req.body;
 
-    // Check if user already exists
     const existingUser = await User.findOne({ email });
     if (existingUser) {
-      return res.status(400).json({
-        message: "User already exists"
-      });
+      return res.status(400).json({ success: false, message: "User already exists" });
     }
 
-    // Validate email
     if (!validator.isEmail(email)) {
-      return res.status(400).json({
-        message: "Enter a valid email"
-      });
+      return res.status(400).json({ success: false, message: "Enter a valid email" });
     }
 
-    // Validate password strength
     if (password.length < 6) {
-      return res.status(400).json({
-        message: "Password must be at least 6 characters"
-      });
+      return res.status(400).json({ success: false, message: "Password must be at least 6 characters" });
     }
 
-    // Hash password
     const hashedPassword = await bcrypt.hash(password, 10);
-
-    // Create user
-    const user = await User.create({
-      name,
-      email,
-      password: hashedPassword
-    });
-
-    // Generate token
+    const user = await User.create({ name, email, password: hashedPassword });
     const token = await generateToken(user._id);
 
-    // Set token in cookies
-    res.cookie("token", token, {
+    const isProduction = process.env.NODE_ENV === 'production';
+    const cookieOptions = {
       httpOnly: true,
       path: "/",
-      secure: true,  // Secure cookies in production
-      sameSite: 'None',  // Cross-origin support
-      maxAge: 3 * 24 * 60 * 60 * 1000  // 3 days
-    });
+      secure: isProduction,
+      sameSite: isProduction ? 'None' : 'Lax',
+      maxAge: 3 * 24 * 60 * 60 * 1000
+    };
 
-    return res.status(201).json({
-      user: user.select("-password"),  // Return user object without password
-      token: token  // Optionally return the token in the response body
-    });
-
+    res.cookie("token", token, cookieOptions);
+    return res.status(201).json({ user, token });
   } catch (error) {
-    console.log("Registration error:", error.message);  // More specific error logging
-    return res.status(500).json({
-      message: "Registration failed, please try again later."
-    });
+    return res.status(500).json({ success: false, message: "Registration failed", error: error.message });
   }
 }
 
@@ -68,51 +59,34 @@ export const login = async (req, res) => {
   try {
     const { email, password } = req.body;
 
-    // Validate email
     if (!validator.isEmail(email)) {
-      return res.status(400).json({
-        message: "Invalid email"
-      });
+      return res.status(400).json({ success: false, message: "Invalid email" });
     }
 
-    // Check if user exists
     const user = await User.findOne({ email });
     if (!user) {
-      return res.status(404).json({
-        message: "User does not exist"
-      });
+      return res.status(404).json({ success: false, message: "User does not exist" });
     }
 
-    // Check if passwords match
     const matchPassword = await bcrypt.compare(password, user.password);
     if (!matchPassword) {
-      return res.status(400).json({
-        message: "Incorrect password"
-      });
+      return res.status(400).json({ success: false, message: "Incorrect password" });
     }
 
-    // Generate token
     const token = await generateToken(user._id);
-
-    // Set token in cookies
-    res.cookie("token", token, {
+    const isProduction = process.env.NODE_ENV === 'production';
+    const cookieOptions = {
       httpOnly: true,
       path: "/",
-      secure: true,  // Secure cookies in production
-      sameSite: 'None',  // Cross-origin support
-      maxAge: 3 * 24 * 60 * 60 * 1000  // 3 days
-    });
+      secure: isProduction,
+      sameSite: isProduction ? 'None' : 'Lax',
+      maxAge: 3 * 24 * 60 * 60 * 1000
+    };
 
-    return res.status(200).json({
-      user,  
-       token 
-    });
-
+    res.cookie("token", token, cookieOptions);
+    return res.status(200).json({ user, token });
   } catch (error) {
-    console.log("Login error:", error.message);  // More specific error logging
-    return res.status(500).json({
-      message: "Login failed, please try again later."
-    });
+    return res.status(500).json({ success: false, message: "Login failed", error: error.message });
   }
 }
 
@@ -121,92 +95,84 @@ export const googleLogin = async (req , res) => {
     const {name, email} = req.body;
     let user = await User.findOne({ email });
     if (!user) {
-     user = await User.create({
-      name, email
-     })
+      user = await User.create({ name, email });
     }
 
-    // Generate token
     const token = await generateToken(user._id);
-
-    // Set token in cookies
-    res.cookie("token", token, {
+    const isProduction = process.env.NODE_ENV === 'production';
+    const cookieOptions = {
       httpOnly: true,
       path: "/",
-      secure: true,  // Secure cookies in production
-      sameSite: 'None',  // Cross-origin support
-      maxAge: 3 * 24 * 60 * 60 * 1000  // 3 days
-    });
+      secure: isProduction,
+      sameSite: isProduction ? 'None' : 'Lax',
+      maxAge: 3 * 24 * 60 * 60 * 1000
+    };
 
-    return res.status(200).json({
-      user,  
-       token 
-    });
-
-
+    res.cookie("token", token, cookieOptions);
+    return res.status(200).json({ user, token });
   } catch (error) {
-    console.log("Google login error:", error.message);  // More specific error logging
-    return res.status(500).json({
-      message: "google login error."
-    });
+    return res.status(500).json({ success: false, message: "Google login error", error: error.message });
   }
 }
 
 export const logOut = async (req, res) => {
   try {
+    const isProduction = process.env.NODE_ENV === 'production';
     res.clearCookie("token", {
       httpOnly: true,
-      secure: true,
-      sameSite: "None",
-      path: "/"
+      path: "/",
+      secure: isProduction,
+      sameSite: isProduction ? 'None' : 'Lax'
     });
     return res.status(200).json({ message: "User logged out successfully" });
   } catch (error) {
-    console.log("User logout error:", error.message);
-    return res.status(500).json({ message: "Logout failed" });
+    return res.status(500).json({ success: false, message: "Logout failed", error: error.message });
   }
 };
-
-
-
-
-// admin 
-
 
 export const adminLogin = async (req , res) => {
   try {
-    const {email, password} = req.body
-    if(email === process.env.ADMIN_EMAIL && password === process.env.ADMIN_PASSWORD){
-      
-      const token = await generateAdminToken(email)
-      res.cookie("adminToken", token, {
-      httpOnly: true,
-      sameSite: "Lax",
-      path: "/",
-      maxAge: 1*24*60*60*1000
-    })
-
-    return res.status(200).json({ message: "Login successful" })
+    const {email, password} = req.body;
+    const adminEmail = process.env.ADMIN_EMAIL;
+    if (email !== adminEmail) {
+      return res.status(401).json({ message: "Invalid credentials" });
     }
-    return res.status(401).json({ message: "Invalid credentials" })
+
+    const adminPasswordHash = await getAdminPasswordHash();
+    const isPasswordValid = await bcrypt.compare(password, adminPasswordHash);
+    if (!isPasswordValid) {
+      return res.status(401).json({ message: "Invalid credentials" });
+    }
+
+    const token = await generateAdminToken(email);
+    const isProduction = process.env.NODE_ENV === 'production';
+    const cookieOptions = {
+      httpOnly: true,
+      path: "/",
+      secure: isProduction,
+      sameSite: isProduction ? 'None' : 'Lax',
+      maxAge: 1 * 24 * 60 * 60 * 1000
+    };
+
+    res.cookie("adminToken", token, cookieOptions);
+    return res.status(200).json({ message: "Login successful" });
   } catch (error) {
-    return res.status(500).json({
-      message: "Invalid credentials"
-    })
+    return res.status(500).json({ success: false, message: "Login failed", error: error.message });
   }
 }
 
-
 export const adminLogOut = async (req, res) => {
   try {
+    const isProduction = process.env.NODE_ENV === 'production';
     res.clearCookie("adminToken", {
       httpOnly: true,
-      sameSite: "Lax",
-      path: "/"
+      path: "/",
+      secure: isProduction,
+      sameSite: isProduction ? 'None' : 'Lax'
     });
     return res.status(200).json({ message: "Admin logged out successfully" });
   } catch (error) {
-    console.log("Admin logout error:", error.message);
-    return res.status(500).json({ message: "Logout failed" });
+    return res.status(500).json({ success: false, message: "Logout failed", error: error.message });
   }
 };
+

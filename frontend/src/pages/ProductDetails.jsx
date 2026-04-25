@@ -1,9 +1,10 @@
-import React, { useContext, useState, useEffect } from "react";
+import React, { useContext, useState, useEffect, useCallback } from "react";
 import { useParams } from "react-router-dom";
 import { ShopDataContext } from "../context/ShopContext";
 import { FaStar } from "react-icons/fa6";
 import { FaStarHalfAlt } from "react-icons/fa";
 import RelatedProduct from "../components/RelatedProduct";
+import ProductReviews from "../components/ProductReviews";
 import Footer from "../components/Footer";
 import Navbar from "../components/Navbar";
 import { motion, AnimatePresence } from "framer-motion";
@@ -20,23 +21,28 @@ const ProductDetails = () => {
   const [size, setSize] = useState("");
   const [selectedTab, setSelectedTab] = useState("description");
 
-  const fetchProductData = () => {
+  const fetchProductData = useCallback(() => {
     if (products.length) {
       const selectedProduct = products.find((item) => item._id === productId);
       if (selectedProduct) {
         setProductData(selectedProduct);
-        setImage1(selectedProduct.image1.url);
-        setImage2(selectedProduct.image2.url);
-        setImage3(selectedProduct.image3.url);
-        setImage4(selectedProduct.image4.url);
-        setImage(selectedProduct.image1.url);
+        setImage1(selectedProduct.image1?.url || "");
+        setImage2(selectedProduct.image2?.url || "");
+        setImage3(selectedProduct.image3?.url || "");
+        setImage4(selectedProduct.image4?.url || "");
+        setImage(selectedProduct.image1?.url || "");
       }
     }
-  };
+  }, [productId, products]);
 
   useEffect(() => {
     fetchProductData();
-  }, [productId, products]);
+  }, [fetchProductData]);
+
+
+  const onReviewAdded = useCallback(() => {
+    fetchProductData();
+  }, [fetchProductData]);
 
   const handleImageChange = (newImage) => {
     setImage(newImage);
@@ -56,6 +62,9 @@ const ProductDetails = () => {
     );
   }
 
+  // Check if size selection is required
+  const isSizeRequired = productData.sizes && productData.sizes.length > 0;
+
   return (
     <>
       <Navbar />
@@ -71,8 +80,8 @@ const ProductDetails = () => {
             transition={{ duration: 0.5 }}
           >
             <motion.div
-              whileHover={{ scale: 1.02 }}
-              className="border border-[#d9cec0] rounded-3xl overflow-hidden mb-4 bg-[#f3efe8]"
+              whileHover={{ scale: 1.02, transition: { duration: 1, ease: [0.16, 1, 0.3, 1] } }}
+              className="border border-[#e4a4bd]/30 rounded-3xl overflow-hidden mb-4 bg-[#f3efe8] organic-card"
             >
               <AnimatePresence mode="wait">
                 <motion.img
@@ -83,25 +92,25 @@ const ProductDetails = () => {
                   transition={{ duration: 0.3 }}
                   src={image}
                   alt="Main Product"
-                  className="w-full h-[400px] object-contain"
+                  className="w-full h-[400px] object-contain image-grayscale-hover"
                 />
               </AnimatePresence>
             </motion.div>
 
             <div className="grid grid-cols-4 gap-3">
-              {[image1, image2, image3, image4].map((img, index) => (
+              {[image1, image2, image3, image4].filter(img => img).map((img, index) => (
                 <motion.button
                   key={index}
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
                   onClick={() => handleImageChange(img)}
-                  className={`border-2 rounded-xl cursor-pointer h-20 object-contain transition-all ${
+                  className={`border-2 rounded-xl cursor-pointer h-20 object-contain transition-all-slow ${
                     image === img
-                      ? "border-[#6b7d56]"
-                      : "border-[#d9cec0] hover:border-[#9e866b]"
+                      ? "border-[#6b7d56] bg-[#f3efe8]"
+                      : "border-[#e4a4bd]/30 hover:border-[#6b7d56] bg-white"
                   }`}
                 >
-                  <img src={img} alt={`thumb${index}`} className="w-full h-full object-contain" />
+                  <img src={img} alt={`thumb${index}`} className="w-full h-full object-contain image-grayscale-hover" />
                 </motion.button>
               ))}
             </div>
@@ -116,7 +125,7 @@ const ProductDetails = () => {
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5, delay: 0.2 }}
-              className="text-2xl md:text-3xl font-display font-semibold mb-4 text-[#3d352b]"
+              className="font-display font-bold tracking-tighter text-[#262626] text-2xl mb-4"
             >
               {productData.name.toUpperCase()}
             </motion.h1>
@@ -127,19 +136,20 @@ const ProductDetails = () => {
               transition={{ duration: 0.5, delay: 0.25 }}
               className="flex items-center gap-1 mb-3"
             >
-              <FaStar className="text-[20px] fill-[#9e866b]" />
-              <FaStar className="text-[20px] fill-[#9e866b]" />
-              <FaStar className="text-[20px] fill-[#9e866b]" />
-              <FaStar className="text-[20px] fill-[#9e866b]" />
-              <FaStarHalfAlt className="text-[20px] fill-[#9e866b]" />
-              <p className="ml-2 text-[#7a6b54] text-sm font-body">(124 reviews)</p>
+              {[1, 2, 3, 4, 5].map((star) => (
+                <FaStar 
+                  key={star} 
+                  className={`text-[20px] ${star <= Math.round(productData.averageRating || 0) ? 'fill-[#9e866b]' : 'fill-gray-300'}`} 
+                />
+              ))}
+              <p className="ml-2 text-[#7a6b54] text-sm font-body">({productData.totalReviews || 0} reviews)</p>
             </motion.div>
 
             <motion.p
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5, delay: 0.3 }}
-              className="text-2xl font-display font-semibold text-[#6b7d56] mb-4"
+              className="text-2xl font-display font-bold tracking-tighter text-[#e4a4bd] mb-4"
             >
               {currency} {productData.price}
             </motion.p>
@@ -153,10 +163,10 @@ const ProductDetails = () => {
               {["description", "reviews"].map((tab) => (
                 <motion.button
                   key={tab}
-                  whileHover={{ scale: 1.02 }}
-                  whileTap={{ scale: 0.98 }}
+                  whileHover={{ scale: 1.03, transition: { duration: 1, ease: [0.16, 1, 0.3, 1] } }}
+                  whileTap={{ scale: 0.97, transition: { duration: 1, ease: [0.16, 1, 0.3, 1] } }}
                   onClick={() => setSelectedTab(tab)}
-                  className={`px-5 py-2 rounded-xl font-medium transition-colors ${
+                  className={`organic-btn px-5 py-2 ${
                     selectedTab === tab
                       ? "bg-[#6b7d56] text-white"
                       : "bg-[#f3efe8] text-[#5e5240] hover:bg-[#e8e0d3]"
@@ -176,7 +186,7 @@ const ProductDetails = () => {
                   exit={{ opacity: 0, y: -10 }}
                   transition={{ duration: 0.3 }}
                 >
-                  <p className="text-[#5e5240] leading-relaxed mb-6 font-body">
+                  <p className="text-[#5e5240] leading-relaxed mb-6 font-body whitespace-pre-line">
                     {productData.description}
                   </p>
                 </motion.div>
@@ -189,44 +199,46 @@ const ProductDetails = () => {
                   transition={{ duration: 0.3 }}
                   className="mb-6"
                 >
-                  <p className="text-[#7a6b54]">Customer reviews coming soon...</p>
+                  <ProductReviews productId={productData._id} onReviewAdded={onReviewAdded} />
                 </motion.div>
               )}
             </AnimatePresence>
 
-            <motion.div
-              initial={{ opacity: 0, y: 10 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: 0.4 }}
-              className="mb-6"
-            >
-              <p className="font-display font-semibold mb-2 text-[#5e5240]">Select Size</p>
-              <div className="flex gap-3 flex-wrap">
-                {productData.sizes.map((item, index) => (
-                  <motion.button
-                    key={index}
-                    whileHover={{ scale: 1.05 }}
-                    whileTap={{ scale: 0.95 }}
-                    onClick={() => setSize(item)}
-                    className={`px-5 py-2 border-2 rounded-xl font-medium transition-colors ${
-                      size === item
-                        ? "bg-[#6b7d56] text-white border-[#6b7d56]"
-                        : "bg-white text-[#5e5240] border-[#d9cec0] hover:border-[#6b7d56]"
-                    }`}
-                  >
-                    {item}
-                  </motion.button>
-                ))}
-              </div>
-            </motion.div>
+            {isSizeRequired && (
+              <motion.div
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5, delay: 0.4 }}
+                className="mb-6"
+              >
+                <p className="font-display font-semibold mb-2 text-[#5e5240]">Select Size</p>
+                <div className="flex gap-3 flex-wrap">
+                  {(productData.sizes || []).map((item, index) => (
+                    <motion.button
+                      key={index}
+                      whileHover={{ scale: 1.05, transition: { duration: 1, ease: [0.16, 1, 0.3, 1] } }}
+                      whileTap={{ scale: 0.95, transition: { duration: 1, ease: [0.16, 1, 0.3, 1] } }}
+                      onClick={() => setSize(item)}
+                      className={`organic-btn px-5 ${
+                        size === item
+                          ? "bg-[#6b7d56] text-white"
+                          : "bg-white text-[#5e5240] hover:border-[#6b7d56] border"
+                      }`}
+                    >
+                      {item}
+                    </motion.button>
+                  ))}
+                </div>
+              </motion.div>
+            )}
 
             <motion.button
-              whileHover={{ scale: 1.03 }}
-              whileTap={{ scale: 0.97 }}
-              onClick={() => addToCart(productData._id, size)}
-              disabled={!size}
-              className={`px-8 py-3 rounded-xl font-semibold transition-colors ${
-                size
+              whileHover={{ scale: 1.02, transition: { duration: 1, ease: [0.16, 1, 0.3, 1] } }}
+              whileTap={{ scale: 0.98, transition: { duration: 1, ease: [0.16, 1, 0.3, 1] } }}
+              onClick={() => addToCart(productData._id, size || "Normal")}
+              disabled={isSizeRequired && !size}
+              className={`organic-btn px-8 py-3 ${
+                (!isSizeRequired || size)
                   ? "bg-[#6b7d56] text-white hover:bg-[#5d6446]"
                   : "bg-[#d9cec0] text-[#9e866b] cursor-not-allowed"
               }`}
@@ -256,3 +268,4 @@ const ProductDetails = () => {
 };
 
 export default ProductDetails;
+

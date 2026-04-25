@@ -8,10 +8,11 @@ const BestSeller = () => {
   const { products } = useContext(ShopDataContext);
   const [bestSeller, setBestSeller] = useState([]);
 
-  useEffect(() => {
-    const filteredProduct = products.filter((item) => item.bestSeller);
-    setBestSeller(filteredProduct.slice(0, 4));
-  }, [products]);
+   useEffect(() => {
+     const productsArray = Array.isArray(products) ? products : [];
+     const filteredProduct = productsArray.filter((item) => item.bestSeller);
+     setBestSeller(filteredProduct.slice(0, 4));
+   }, [products]);
 
   return (
     <div className="text-center">

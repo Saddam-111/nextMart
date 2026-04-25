@@ -17,12 +17,20 @@ export const uploadCloudinary = async (file, folder) => {
   try {
     if (!file) throw new Error("No file provided");
 
+    // Validate file extension (only images allowed)
+    const validExtensions = ['jpg', 'jpeg', 'png', 'gif', 'webp'];
+    const fileExt = file.split('.').pop()?.toLowerCase();
+    if (!fileExt || !validExtensions.includes(fileExt)) {
+      if (fs.existsSync(file)) fs.unlinkSync(file);
+      throw new Error("Only image files are allowed (jpg, jpeg, png, gif, webp)");
+    }
+
     const result = await cloudinary.uploader.upload(file, {
       resource_type: "image",
-      folder: `nextMart/${folder}`,   //folder name dynamically in folder
+      folder: `nextMart/${folder}`,
     });
 
-    //safety delete temp file
+    // Safety delete temp file
     if (fs.existsSync(file)) {
       fs.unlinkSync(file);
     }

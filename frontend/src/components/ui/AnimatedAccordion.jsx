@@ -4,9 +4,11 @@ import { motion, AnimatePresence } from 'framer-motion';
 const AnimatedAccordion = ({ isOpen, onToggle, title, children, className = '' }) => {
   return (
     <div className={`border rounded-2xl overflow-hidden bg-white ${className}`}>
-      <button
+      <motion.button
+        whileHover={{ scale: 1.01, transition: { duration: 1, ease: [0.16, 1, 0.3, 1] } }}
+        whileTap={{ scale: 0.99, transition: { duration: 1, ease: [0.16, 1, 0.3, 1] } }}
         onClick={onToggle}
-        className="w-full text-left px-4 py-3 font-semibold bg-[#f3efe8] flex items-center justify-between hover:bg-[#e8e0d3] transition-colors duration-300"
+        className="w-full text-left px-4 py-3 font-semibold bg-[#f3efe8] flex items-center justify-between hover:bg-[#e8e0d3] transition-all-slow organic-btn"
       >
         <span className="font-display text-[#3d352b]">{title}</span>
         <motion.span
@@ -18,7 +20,7 @@ const AnimatedAccordion = ({ isOpen, onToggle, title, children, className = '' }
             <path d="M2 4L6 8L10 4" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
           </svg>
         </motion.span>
-      </button>
+        </motion.button>
       <AnimatePresence>
         {isOpen && (
           <motion.div

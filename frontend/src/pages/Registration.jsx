@@ -53,11 +53,11 @@ const Registration = () => {
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5 }}
-        className="w-full max-w-md bg-[#fdfbf7] rounded-3xl shadow-lg p-8"
+        className="w-full max-w-md bg-[#fdf8f3] rounded-3xl shadow-lg p-8 organic-card"
       >
         <motion.h1
           whileHover={{ scale: 1.02 }}
-          className="text-3xl font-display font-semibold text-[#5e5240] text-center mb-6"
+          className="text-3xl font-display font-semibold text-[#262626] text-center mb-6"
         >
           nextMart
         </motion.h1>
@@ -73,19 +73,19 @@ const Registration = () => {
 
         <form onSubmit={handleSignup} className="space-y-4">
           <motion.button
-            whileHover={{ scale: 1.02 }}
-            whileTap={{ scale: 0.98 }}
+            whileHover={{ scale: 1.02, transition: { duration: 1, ease: [0.16, 1, 0.3, 1] } }}
+            whileTap={{ scale: 0.98, transition: { duration: 1, ease: [0.16, 1, 0.3, 1] } }}
             type="button"
             onClick={googleSignup}
-            className="w-full flex items-center justify-center gap-2 bg-[#5e5240] hover:bg-[#4a4536] text-white py-3 rounded-xl font-medium transition-colors"
+            className="w-full flex items-center justify-center gap-2 bg-[#5e5240] hover:bg-[#4a4536] text-white py-3 rounded-xl font-medium transition-all-slow organic-btn"
           >
             <FaGoogle /> Continue with Google
           </motion.button>
 
           <div className="flex items-center my-4">
-            <div className="flex-1 h-px bg-[#d9cec0]"></div>
+            <div className="flex-1 h-px bg-[#e4a4bd]/30"></div>
             <span className="px-3 text-[#9e866b] text-sm">OR</span>
-            <div className="flex-1 h-px bg-[#d9cec0]"></div>
+            <div className="flex-1 h-px bg-[#e4a4bd]/30"></div>
           </div>
 
           <div className="space-y-3">
@@ -96,7 +96,7 @@ const Registration = () => {
               onChange={(e) => setName(e.target.value)}
               placeholder="Full Name"
               required
-              className="w-full px-4 py-3 border border-[#d9cec0] rounded-xl bg-white text-[#5e5240] placeholder-[#b39f87] focus:outline-none focus:border-[#6b7d56] focus:ring-2 focus:ring-[#6b7d56]/20 transition-all"
+              className="w-full organic-input"
             />
 
             <motion.input
@@ -106,7 +106,7 @@ const Registration = () => {
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               required
-              className="w-full px-4 py-3 border border-[#d9cec0] rounded-xl bg-white text-[#5e5240] placeholder-[#b39f87] focus:outline-none focus:border-[#6b7d56] focus:ring-2 focus:ring-[#6b7d56]/20 transition-all"
+              className="w-full organic-input"
             />
 
             <div className="relative">
@@ -117,22 +117,22 @@ const Registration = () => {
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 required
-                className="w-full px-4 py-3 border border-[#d9cec0] rounded-xl bg-white text-[#5e5240] placeholder-[#b39f87] focus:outline-none focus:border-[#6b7d56] focus:ring-2 focus:ring-[#6b7d56]/20 transition-all"
+                className="w-full organic-input pr-10"
               />
               <button
                 type="button"
                 onClick={() => setShowPassword(!showPassword)}
-                className="absolute right-3 top-3.5 text-[#7a6b54] cursor-pointer hover:text-[#5e5240]"
+                className="absolute right-3 top-3.5 text-[#7a6b54] cursor-pointer hover:text-[#262626] transition-colors"
               >
                 {showPassword ? <FaEyeSlash /> : <FaEye />}
               </button>
             </div>
 
             <motion.button
-              whileHover={{ scale: 1.03 }}
-              whileTap={{ scale: 0.97 }}
+              whileHover={{ scale: 1.03, transition: { duration: 1, ease: [0.16, 1, 0.3, 1] } }}
+              whileTap={{ scale: 0.97, transition: { duration: 1, ease: [0.16, 1, 0.3, 1] } }}
               type="submit"
-              className="w-full bg-[#6b7d56] hover:bg-[#5d6446] text-white py-3 rounded-xl font-medium transition-colors"
+              className="w-full organic-btn bg-[#e4a4bd] text-white hover:bg-[#d494ad]"
             >
               Create Account
             </motion.button>

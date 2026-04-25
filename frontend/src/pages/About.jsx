@@ -29,17 +29,17 @@ const About = () => {
         animate={{ opacity: 1 }}
         className="text-[#3d352b]"
       >
-        <section className="relative bg-[#f3efe8] py-16 px-6 md:px-16 flex flex-col md:flex-row items-center gap-10 max-w-7xl mx-auto mt-20">
+        <section className="relative bg-[#f5f0eb] py-16 px-6 md:px-16 flex flex-col md:flex-row items-center gap-10 max-w-7xl mx-auto mt-20">
           <motion.div
             initial={{ opacity: 0, x: -30 }}
             animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.6 }}
+            transition={{ duration: 0.6, ease: "cubic-bezier(0.16, 1, 0.3, 1)" }}
             className="flex-1"
           >
             <h1 className="text-3xl md:text-5xl font-display font-semibold mb-4">
-              About <span className="text-[#6b7d56]">NextMart</span>
+              About <span className="text-[#e4a4bd]">NextMart</span>
             </h1>
-            <p className="text-[#5e5240] text-lg leading-relaxed font-body">
+            <p className="text-[#262626] text-lg leading-relaxed font-body">
               At NextMart, we believe shopping should be effortless, enjoyable, and 
               reliable. From fashion to lifestyle essentials, we bring quality 
               products to your doorstep with trust and care.
@@ -48,11 +48,11 @@ const About = () => {
           <motion.div
             initial={{ opacity: 0, x: 30 }}
             animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.6, delay: 0.2 }}
+            transition={{ duration: 0.6, delay: 0.2, ease: "cubic-bezier(0.16, 1, 0.3, 1)" }}
             className="flex-1"
           >
             <motion.img
-              whileHover={{ scale: 1.02 }}
+              whileHover={{ scale: 1.02, transition: { duration: 1, ease: [0.16, 1, 0.3, 1] } }}
               src={images.nextMartBanner}
               alt="About NextMart"
               className="rounded-3xl shadow-lg"
@@ -74,7 +74,7 @@ const About = () => {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ delay: 0.1 }}
-            className="text-[#5e5240] leading-relaxed font-body"
+            className="text-[#262626] leading-relaxed font-body"
           >
             Founded with a vision to make online shopping more accessible and 
             reliable, NextMart has grown into a trusted marketplace for thousands of 
@@ -85,7 +85,7 @@ const About = () => {
           </motion.p>
         </section>
 
-        <section className="bg-[#f3efe8] py-16 px-6 md:px-16">
+        <section className="bg-[#f5f0eb] py-16 px-6 md:px-16">
           <motion.h2
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -102,16 +102,16 @@ const About = () => {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ delay: index * 0.1 }}
-                whileHover={{ y: -6 }}
-                className="p-6 bg-[#fdfbf7] rounded-3xl shadow-sm hover:shadow-md transition-all"
+                whileHover={{ y: -6, transition: { duration: 1, ease: [0.16, 1, 0.3, 1] } }}
+                className="p-6 bg-[#fdf8f3] rounded-3xl shadow-sm hover:shadow-md transition-all-slow organic-card"
               >
                 <motion.div
-                  whileHover={{ scale: 1.1 }}
+                  whileHover={{ scale: 1.1, transition: { duration: 1, ease: [0.16, 1, 0.3, 1] } }}
                   className="mb-4"
                 >
-                  <feature.icon className="text-4xl mx-auto text-[#6b7d56]" />
+                  <feature.icon className="text-4xl mx-auto text-[#e4a4bd]" />
                 </motion.div>
-                <h3 className="font-display font-semibold mb-2 text-[#5e5240]">{feature.title}</h3>
+                <h3 className="font-display font-semibold mb-2 text-[#262626]">{feature.title}</h3>
                 <p className="text-[#7a6b54] text-sm font-body">{feature.desc}</p>
               </motion.div>
             ))}
@@ -135,23 +135,23 @@ const About = () => {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ delay: index * 0.1 }}
-                whileHover={{ y: -6 }}
-                className="p-6 bg-[#fdfbf7] rounded-3xl shadow-sm hover:shadow-md transition-all"
+                whileHover={{ y: -6, transition: { duration: 1, ease: [0.16, 1, 0.3, 1] } }}
+                className="p-6 bg-[#fdf8f3] rounded-3xl shadow-sm hover:shadow-md transition-all-slow organic-card"
               >
                 <motion.img
-                  whileHover={{ scale: 1.05 }}
+                  whileHover={{ scale: 1.05, transition: { duration: 1, ease: [0.16, 1, 0.3, 1] } }}
                   src={`https://via.placeholder.com/150`}
                   alt={member.name}
-                  className="w-28 h-28 rounded-full mx-auto mb-4 object-cover bg-[#e8e0d3]"
+                  className="w-28 h-28 rounded-full mx-auto mb-4 object-cover bg-[#e8e0d3] image-grayscale-hover"
                 />
-                <h3 className="font-display font-semibold text-[#5e5240]">{member.name}</h3>
+                <h3 className="font-display font-semibold text-[#262626]">{member.name}</h3>
                 <p className="text-[#7a6b54] text-sm font-body">{member.role}</p>
               </motion.div>
             ))}
           </div>
         </section>
 
-        <section className="bg-gradient-to-r from-[#9e866b] to-[#6b7d56] py-16 px-6 md:px-16 text-center text-white rounded-3xl mx-4 mb-8">
+        <section className="bg-gradient-to-r from-[#9e866b] to-[#6b7d56] py-16 px-6 md:px-16 text-center text-[#262626] rounded-3xl mx-4 mb-8">
           <motion.h2
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -172,9 +172,9 @@ const About = () => {
           </motion.p>
           <motion.a
             href="/collection"
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
-            className="inline-block bg-white text-[#5e5240] font-semibold px-8 py-3 rounded-xl shadow hover:bg-[#f3efe8] transition-colors"
+            whileHover={{ scale: 1.05, transition: { duration: 1, ease: [0.16, 1, 0.3, 1] } }}
+            whileTap={{ scale: 0.95, transition: { duration: 1, ease: [0.16, 1, 0.3, 1] } }}
+            className="inline-block organic-btn bg-white text-[#262626] hover:bg-[#f5f0eb]"
           >
             Shop Now
           </motion.a>
@@ -186,3 +186,5 @@ const About = () => {
 };
 
 export default About;
+
+

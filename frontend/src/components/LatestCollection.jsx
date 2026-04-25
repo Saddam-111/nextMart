@@ -8,9 +8,10 @@ const LatestCollection = () => {
   let { products } = useContext(ShopDataContext);
   const [latestProducts, setLatestProducts] = useState([]);
 
-  useEffect(() => {
-    setLatestProducts(products.slice(0, 8));
-  }, [products]);
+   useEffect(() => {
+     const productsArray = Array.isArray(products) ? products : [];
+     setLatestProducts(productsArray.slice(0, 8));
+   }, [products]);
 
   return (
     <div className="text-center">

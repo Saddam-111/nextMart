@@ -2,7 +2,7 @@ import React from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { dropdownVariants } from '../../lib/animations';
 
-const AnimatedDropdown = ({ isOpen, onClose, children, className = '', anchor = 'right' }) => {
+const AnimatedDropdown = ({ isOpen, children, className = '', anchor = 'right' }) => {
   const anchorClasses = {
     right: 'right-0',
     left: 'left-0',

@@ -1,39 +1,29 @@
 import axios from "axios";
-import { createContext, useEffect, useState } from "react";
-
-
+import { createContext, useEffect, useState, useCallback } from "react";
 
 export const userDataContext = createContext()
+
 function UserContext({children}){
   const [userData, setUserData] = useState(null)
   const baseUrl = import.meta.env.VITE_BASE_URL
 
-
-
-  const getCurrentUser = async () => {
+  const getCurrentUser = useCallback(async () => {
     try {
       const result = await axios.get(baseUrl + "/api/v1/user/getCurrentUser", {withCredentials: true})
       setUserData(result.data)
-      //console.log(result.data)
-
     } catch (error) {
       setUserData(null)
       console.log(error)
     }
-  }
+  }, [baseUrl]);
 
-  useEffect( () => {
+  useEffect(() => {
     getCurrentUser()
-  }, [baseUrl])
-
-
-
-
+  }, [getCurrentUser])
 
   const value = {
-      userData, setUserData, getCurrentUser, baseUrl
+    userData, setUserData, getCurrentUser, baseUrl
   }
-
   
   return (
     <div>

@@ -16,7 +16,7 @@ const OurPolicy = () => {
       desc: "Hassle-free returns within 7 days of purchase.",
     },
     {
-      icon: <FaHeadset className="text-4xl text-[#5e5240]" />,
+      icon: <FaHeadset className="text-4xl text-[#262626]" />,
       title: "24/7 Support",
       desc: "We are here to assist you round the clock.",
     },
@@ -38,17 +38,16 @@ const OurPolicy = () => {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.5, delay: index * 0.1 }}
-            whileHover={{ y: -6, transition: { duration: 0.3 } }}
-            className="flex flex-col items-center text-center bg-[#fdfbf7] p-6 rounded-3xl shadow-sm hover:shadow-md transition-all"
+            whileHover={{ y: -6, transition: { duration: 1, ease: [0.16, 1, 0.3, 1] } }}
+            className="flex flex-col items-center text-center bg-[#fdf8f3] p-6 rounded-3xl shadow-sm hover:shadow-md transition-all-slow organic-card"
           >
             <motion.div
-              whileHover={{ scale: 1.1 }}
-              transition={{ duration: 0.3 }}
+              whileHover={{ scale: 1.1, transition: { duration: 1, ease: [0.16, 1, 0.3, 1] } }}
               className="mb-4"
             >
               {policy.icon}
             </motion.div>
-            <h3 className="text-lg font-display font-semibold text-[#5e5240] mb-2">
+            <h3 className="text-lg font-display font-semibold text-[#262626] mb-2">
               {policy.title}
             </h3>
             <p className="text-[#7a6b54] text-sm font-body">{policy.desc}</p>

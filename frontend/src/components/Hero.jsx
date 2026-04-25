@@ -18,14 +18,7 @@ const heroVariants = {
   }),
 };
 
-const textVariants = {
-  initial: { opacity: 0, y: 30 },
-  animate: { 
-    opacity: 1, 
-    y: 0,
-    transition: { duration: 0.8, ease: "easeOut" }
-  },
-};
+
 
 const Hero = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -77,23 +70,23 @@ const Hero = () => {
       <motion.button
         initial={{ opacity: 0, x: -20 }}
         animate={{ opacity: 1, x: 0 }}
-        whileHover={{ scale: 1.1, backgroundColor: "#5e5240" }}
-        whileTap={{ scale: 0.9 }}
+        whileHover={{ scale: 1.1, backgroundColor: "#e4a4bd", transition: { duration: 1, ease: [0.16, 1, 0.3, 1] } }}
+        whileTap={{ scale: 0.9, transition: { duration: 1, ease: [0.16, 1, 0.3, 1] } }}
         onClick={prevSlide}
-        className="absolute top-1/2 left-4 -translate-y-1/2 bg-white/90 backdrop-blur-sm p-3 rounded-full shadow-lg hover:text-white transition-colors z-10"
+        className="absolute top-1/2 left-4 -translate-y-1/2 bg-white/90 backdrop-blur-sm p-3 rounded-full shadow-lg hover:text-white transition-all-slow z-10"
       >
-        <FaArrowLeft className="text-[#5e5240]" />
+        <FaArrowLeft className="text-[#e4a4bd]" />
       </motion.button>
 
       <motion.button
         initial={{ opacity: 0, x: 20 }}
         animate={{ opacity: 1, x: 0 }}
-        whileHover={{ scale: 1.1, backgroundColor: "#5e5240" }}
-        whileTap={{ scale: 0.9 }}
+        whileHover={{ scale: 1.1, backgroundColor: "#e4a4bd", transition: { duration: 1, ease: [0.16, 1, 0.3, 1] } }}
+        whileTap={{ scale: 0.9, transition: { duration: 1, ease: [0.16, 1, 0.3, 1] } }}
         onClick={nextSlide}
-        className="absolute top-1/2 right-4 -translate-y-1/2 bg-white/90 backdrop-blur-sm p-3 rounded-full shadow-lg hover:text-white transition-colors z-10"
+        className="absolute top-1/2 right-4 -translate-y-1/2 bg-white/90 backdrop-blur-sm p-3 rounded-full shadow-lg hover:text-white transition-all-slow z-10"
       >
-        <FaArrowRight className="text-[#5e5240]" />
+        <FaArrowRight className="text-[#e4a4bd]" />
       </motion.button>
 
       <div className="absolute bottom-5 left-1/2 -translate-x-1/2 flex gap-3 z-10">
@@ -104,15 +97,15 @@ const Hero = () => {
               setDirection(index > currentIndex ? 1 : -1);
               setCurrentIndex(index);
             }}
-            className={`relative h-3 rounded-full transition-all duration-300 ${
-              index === currentIndex ? "w-8 bg-[#5e5240]" : "w-3 bg-white/70"
+            className={`relative h-3 rounded-full transition-all-slow ${
+              index === currentIndex ? "w-8 bg-[#e4a4bd]" : "w-3 bg-white/70"
             }`}
-            whileHover={{ scale: 1.2 }}
+            whileHover={{ scale: 1.2, transition: { duration: 1, ease: [0.16, 1, 0.3, 1] } }}
           >
             {index === currentIndex && (
               <motion.div
                 layoutId="activeDot"
-                className="absolute inset-0 bg-[#5e5240] rounded-full"
+                className="absolute inset-0 bg-[#e4a4bd] rounded-full"
                 transition={{ type: "spring", stiffness: 500, damping: 30 }}
               />
             )}

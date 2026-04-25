@@ -1,35 +1,30 @@
-import jwt from 'jsonwebtoken'
+﻿import jwt from 'jsonwebtoken';
 
-
-export const isAuth = async (req, res, next) => {
+export const isAuth = (req, res, next) => {
   try {
     const { token } = req.cookies;
 
-    //console.log("Token in cookies:", token);  // Check if token is received
-
     if (!token) {
-      return res.status(400).json({
-        message: "User doesn't have token"
+      return res.status(401).json({
+        success: false,
+        message: "Authentication required: no token provided"
       });
     }
 
-    // Verify the token
     const verifyToken = jwt.verify(token, process.env.JWT_SECRET);
-    if (!verifyToken) {
-      console.log("Invalid token: verification failed");
-      return res.status(400).json({
-        message: "Invalid Token"
-      });
-    }
-
     req.userId = verifyToken.userId;
-    //console.log("Verified userId:", req.userId);  // Log userId after token verification
-
     next();
   } catch (error) {
-    console.log("Error in isAuth:", error);  // Log the error if any
-    return res.status(500).json({
-      message: "isAuth error"
+    const statusCode = error.name === 'JsonWebTokenError' ? 401 :
+                       error.name === 'TokenExpiredError' ? 401 : 500;
+    const message = error.name === 'JsonWebTokenError' ? 'Invalid token' :
+                    error.name === 'TokenExpiredError' ? 'Token expired' :
+                    'Authentication error';
+
+    return res.status(statusCode).json({
+      success: false,
+      message
     });
   }
 };
+

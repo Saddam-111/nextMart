@@ -15,7 +15,7 @@ const NewsLetter = () => {
       initial={{ opacity: 0 }}
       whileInView={{ opacity: 1 }}
       viewport={{ once: true }}
-      className="bg-[#f3efe8] py-14 px-6 md:px-16 text-center rounded-3xl mx-4 my-8"
+      className="bg-[#f3efe8] py-14 px-6 md:px-16 text-center rounded-3xl mx-4 my-8 organic-card"
     >
       <Title text1={"Subscribe to"} text2={"Our Newsletter"} />
       <motion.p
@@ -32,19 +32,19 @@ const NewsLetter = () => {
         className="flex flex-col sm:flex-row justify-center items-center gap-4 max-w-xl mx-auto"
       >
         <motion.input
-          whileFocus={{ scale: 1.02 }}
+          whileFocus={{ scale: 1.02, transition: { duration: 1, ease: [0.16, 1, 0.3, 1] } }}
           type="email"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
           placeholder="Enter your email"
           required
-          className="w-full sm:flex-1 border border-[#d9cec0] px-5 py-3 rounded-xl bg-white text-[#5e5240] placeholder-[#b39f87] focus:outline-none focus:border-[#6b7d56] focus:ring-2 focus:ring-[#6b7d56]/20 transition-all font-body"
+          className="w-full sm:flex-1 organic-input"
         />
         <motion.button
-          whileHover={{ scale: 1.03 }}
-          whileTap={{ scale: 0.97 }}
+          whileHover={{ scale: 1.03, transition: { duration: 1, ease: [0.16, 1, 0.3, 1] } }}
+          whileTap={{ scale: 0.97, transition: { duration: 1, ease: [0.16, 1, 0.3, 1] } }}
           type="submit"
-          className="bg-[#6b7d56] hover:bg-[#5d6446] text-white px-8 py-3 rounded-xl font-medium transition-colors font-body"
+          className="organic-btn bg-[#6b7d56] text-white hover:bg-[#5d6446] px-8"
         >
           Subscribe
         </motion.button>

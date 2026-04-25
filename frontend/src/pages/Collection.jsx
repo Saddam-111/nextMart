@@ -1,238 +1,158 @@
-import React, { useContext, useEffect, useState } from "react";
+﻿import React, { useContext, useEffect, useState, useMemo } from "react";
 import Title from "../components/Title";
 import { ShopDataContext } from "../context/ShopContext";
 import Card from "../components/Card";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 import { motion, AnimatePresence } from "framer-motion";
-import AnimatedAccordion from "../components/ui/AnimatedAccordion";
+import AnimatedSelect from "../components/ui/AnimatedSelect";
 import { productGridStagger, staggerItem } from "../lib/animations";
 
 const Collection = () => {
-  const [showFilter, setShowFilter] = useState(false);
   const { products, search } = useContext(ShopDataContext);
 
-  const [filterProduct, setFilterProduct] = useState([]);
-  const [category, setCategory] = useState([]);
-  const [subCategory, setSubCategory] = useState([]);
-  const [sortType, setSortType] = useState("relevant");
+   const [filterProduct, setFilterProduct] = useState([]);
+   const [category, setCategory] = useState("");
+   const [subCategory, setSubCategory] = useState("");
+   const [sortType, setSortType] = useState("relevant");
 
-  const [openCategory, setOpenCategory] = useState(true);
-  const [openSubCategory, setOpenSubCategory] = useState(true);
+   const categoryOptions = [
+     { value: "", label: "All Categories" },
+     { value: "Electronics", label: "Electronics" },
+     { value: "Clothing", label: "Clothing" },
+     { value: "Books", label: "Books" },
+     { value: "Home & Kitchen", label: "Home & Kitchen" },
+     { value: "Sports", label: "Sports" },
+     { value: "Beauty", label: "Beauty" },
+     { value: "Toys", label: "Toys" },
+     { value: "Other", label: "Other" },
+   ];
 
-  const [isSortOpen, setIsSortOpen] = useState(false);
+   const subCategoryOptions = useMemo(() => {
+     const uniqueSubCategories = [...new Set(products.map(p => p.subCategory).filter(Boolean))];
+     return [
+       { value: "", label: "All Sub-Categories" },
+       ...uniqueSubCategories.map(sub => ({ value: sub, label: sub }))
+     ];
+   }, [products]);
 
-  const categories = [
-    { value: "Men", label: "Men" },
-    { value: "Women", label: "Women" },
-    { value: "Kids", label: "Kids" },
-  ];
+   const sortOptions = [
+     { value: "relevant", label: "Sort By: Relevant" },
+     { value: "low-high", label: "Price (Low â†’ High)" },
+     { value: "high-low", label: "Price (High â†’ Low)" },
+   ];
 
-  const subCategories = [
-    { value: "TopWear", label: "Top Wear" },
-    { value: "BottomWear", label: "Bottom Wear" },
-    { value: "WinterWear", label: "Winter Wear" },
-  ];
+   
+   useEffect(() => {
+     let productCopy = [...products];
 
-  const sortOptions = [
-    { value: "relevant", label: "Sort By: Relevant" },
-    { value: "low-high", label: "Price (Low → High)" },
-    { value: "high-low", label: "Price (High → Low)" },
-  ];
+     
+     if (search) {
+       productCopy = productCopy.filter((item) =>
+         item.name.toLowerCase().includes(search.toLowerCase())
+       );
+     }
 
-  const toggleCategory = (e) => {
-    const value = e.target.value;
-    setCategory((prev) =>
-      prev.includes(value)
-        ? prev.filter((item) => item !== value)
-        : [...prev, value]
-    );
-  };
+     
+     if (category) {
+       productCopy = productCopy.filter((item) => item.category === category);
+     }
 
-  const toggleSubCategory = (e) => {
-    const value = e.target.value;
-    setSubCategory((prev) =>
-      prev.includes(value)
-        ? prev.filter((item) => item !== value)
-        : [...prev, value]
-    );
-  };
+     
+     if (subCategory) {
+       productCopy = productCopy.filter((item) => item.subCategory === subCategory);
+     }
 
-  const applyFilter = () => {
-    let productCopy = [...products];
+     
+     if (sortType === "low-high") {
+       productCopy.sort((a, b) => a.price - b.price);
+     } else if (sortType === "high-low") {
+       productCopy.sort((a, b) => b.price - a.price);
+     }
 
-    if (search) {
-      productCopy = productCopy.filter((item) =>
-        item.name.toLowerCase().includes(search.toLowerCase())
-      );
-    }
-
-    if (category.length > 0) {
-      productCopy = productCopy.filter((item) =>
-        category.includes(item.category)
-      );
-    }
-
-    if (subCategory.length > 0) {
-      productCopy = productCopy.filter((item) =>
-        subCategory.includes(item.subCategory)
-      );
-    }
-
-    setFilterProduct(productCopy);
-  };
-
-  const sortProducts = () => {
-    let sorted = [...filterProduct];
-
-    if (sortType === "low-high") {
-      sorted.sort((a, b) => a.price - b.price);
-    } else if (sortType === "high-low") {
-      sorted.sort((a, b) => b.price - a.price);
-    } else {
-      applyFilter();
-      return;
-    }
-
-    setFilterProduct(sorted);
-  };
-
-  useEffect(() => {
-    sortProducts();
-  }, [sortType]);
-
-  useEffect(() => {
-    setFilterProduct(products);
-  }, [products]);
-
-  useEffect(() => {
-    applyFilter();
-  }, [category, subCategory, search]);
+     setFilterProduct(productCopy);
+   }, [products, search, category, subCategory, sortType]);
 
   return (
     <>
-  <Navbar />
+      <Navbar />
 
-  <div className="flex gap-6 px-4 md:px-8 py-6 max-w-7xl mx-auto">
-    
-    {/* LEFT SIDEBAR (FIXED) */}
-    <div className="hidden md:block w-1/4 lg:w-1/5">
-      <div className="sticky top-24 space-y-4">
-        <AnimatedAccordion
-          isOpen={openCategory}
-          onToggle={() => setOpenCategory(!openCategory)}
-          title="Categories"
-        >
-          {categories.map((cat) => (
-            <label key={cat.value} className="flex gap-2">
-              <input
-                type="checkbox"
-                value={cat.value}
-                onChange={toggleCategory}
-              />
-              {cat.label}
-            </label>
-          ))}
-        </AnimatedAccordion>
+      <div className="px-4 md:px-8 py-6 max-w-7xl mx-auto mt-16">
+        {}
+        <div className="space-y-6 mb-8">
+          <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 pb-6 border-b border-[#e4a4bd]/30">
+            <Title text1="OUR" text2="COLLECTION" />
+            
+            <div className="flex flex-col sm:flex-row flex-wrap items-center gap-4 w-full md:w-auto">
+              {}
+              <div className="w-full sm:w-48">
+                <p className="text-xs font-medium text-[#7a6b54] mb-1.5 ml-1">Category</p>
+                <AnimatedSelect
+                  value={category}
+                  onChange={(e) => setCategory(e.target.value)}
+                  options={categoryOptions}
+                />
+              </div>
 
-        <AnimatedAccordion
-          isOpen={openSubCategory}
-          onToggle={() => setOpenSubCategory(!openSubCategory)}
-          title="Sub-Categories"
-        >
-          {subCategories.map((sub) => (
-            <label key={sub.value} className="flex gap-2">
-              <input
-                type="checkbox"
-                value={sub.value}
-                onChange={toggleSubCategory}
-              />
-              {sub.label}
-            </label>
-          ))}
-        </AnimatedAccordion>
-      </div>
-    </div>
+              {}
+              <div className="w-full sm:w-48">
+                <p className="text-xs font-medium text-[#7a6b54] mb-1.5 ml-1">Sub-Category</p>
+                <AnimatedSelect
+                  value={subCategory}
+                  onChange={(e) => setSubCategory(e.target.value)}
+                  options={subCategoryOptions}
+                />
+              </div>
 
-    {/* RIGHT SIDE */}
-    <div className="flex-1">
-      
-      {/* FIXED HEADER */}
-      <div className="sticky top-16 z-40 bg-white pb-4">
-        <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b pb-4">
-          
-          <Title text1="ALL" text2="COLLECTIONS" />
-
-          {/* SORT DROPDOWN */}
-          <div className="relative w-[220px]">
-            <motion.button
-              whileTap={{ scale: 0.97 }}
-              onClick={() => setIsSortOpen((prev) => !prev)}
-              className="w-full flex justify-between items-center border px-4 py-2.5 rounded-xl bg-white"
-            >
-              {sortOptions.find((opt) => opt.value === sortType)?.label}
-
-              <motion.span animate={{ rotate: isSortOpen ? 180 : 0 }}>
-                ▼
-              </motion.span>
-            </motion.button>
-
-            <AnimatePresence>
-              {isSortOpen && (
-                <motion.div
-                  initial={{ opacity: 0, y: -10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: -10 }}
-                  className="absolute left-0 mt-2 w-full bg-white border rounded-xl shadow-lg z-50"
-                >
-                  {sortOptions.map((option) => (
-                    <div
-                      key={option.value}
-                      onClick={() => {
-                        setSortType(option.value);
-                        setIsSortOpen(false);
-                      }}
-                      className="px-4 py-2 hover:bg-gray-100 cursor-pointer"
-                    >
-                      {option.label}
-                    </div>
-                  ))}
-                </motion.div>
-              )}
-            </AnimatePresence>
+              {}
+              <div className="w-full sm:w-48">
+                <p className="text-xs font-medium text-[#7a6b54] mb-1.5 ml-1">Sort By</p>
+                <AnimatedSelect
+                  value={sortType}
+                  onChange={(e) => setSortType(e.target.value)}
+                  options={sortOptions}
+                />
+              </div>
+            </div>
           </div>
         </div>
+
+        {}
+        <motion.div
+          variants={productGridStagger}
+          initial="initial"
+          animate="animate"
+          className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6"
+        >
+          {filterProduct.length > 0 ? (
+            filterProduct.map((item, index) => (
+              <motion.div key={item._id} variants={staggerItem}>
+                <Card
+                  id={item._id}
+                  name={item.name}
+                  price={item.price}
+                  image={item.image1}
+                />
+              </motion.div>
+            ))
+          ) : (
+            <div className="col-span-full text-center py-24 bg-white rounded-3xl border border-dashed border-[#e4a4bd]/50">
+              <p className="text-[#7a6b54] font-body text-lg">
+                No products found matching your filters.
+              </p>
+              <button 
+                onClick={() => {setCategory(""); setSubCategory("");}}
+                className="mt-4 text-[#e4a4bd] hover:underline font-medium"
+              >
+                Clear all filters
+              </button>
+            </div>
+          )}
+        </motion.div>
       </div>
 
-      {/* SCROLLABLE PRODUCTS */}
-      <motion.div
-        variants={productGridStagger}
-        initial="initial"
-        animate="animate"
-        className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 mt-6"
-      >
-        {filterProduct.length > 0 ? (
-          filterProduct.map((item, index) => (
-            <motion.div key={index} variants={staggerItem}>
-              <Card
-                id={item._id}
-                name={item.name}
-                price={item.price}
-                image={item.image1}
-              />
-            </motion.div>
-          ))
-        ) : (
-          <p className="col-span-full text-center py-12">
-            No products found.
-          </p>
-        )}
-      </motion.div>
-    </div>
-  </div>
-
-  <Footer />
-</>
+      <Footer />
+    </>
   );
 };
 
