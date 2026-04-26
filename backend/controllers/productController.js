@@ -1,4 +1,4 @@
-﻿import { uploadCloudinary, deleteCloudinary } from "../config/cloudinary.js";
+import { uploadCloudinary, deleteCloudinary } from "../config/cloudinary.js";
 import Product from "../models/productModel.js";
 import User from "../models/userModel.js";
 
@@ -134,7 +134,7 @@ export const removeProduct = async (req, res) => {
 export const listProduct = async (req , res) => {
   try {
     const products = await Product.find({ isActive: true })
-      .select('name price originalPrice images category subCategory averageRating totalReviews stock isActive featured bestSeller')
+      .select('name description price originalPrice images category subCategory sizes date averageRating totalReviews stock isActive featured bestSeller')
       .sort({ createdAt: -1 });
 
     if(!products){

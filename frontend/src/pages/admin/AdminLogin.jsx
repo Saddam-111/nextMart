@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { useAdmin } from "../../context/AdminContext";
+import { useAdmin } from "../../context/admin/AdminContext";
 import { motion } from "framer-motion";
 
 const AdminLogin = () => {

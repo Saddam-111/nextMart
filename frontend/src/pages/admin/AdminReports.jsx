@@ -8,9 +8,9 @@ import {
   FiFile,
   FiCalendar,
 } from "react-icons/fi";
-import AdminLayout from "../../components/layout/AdminLayout";
+import AdminLayout from "../../components/admin/layout/AdminLayout";
 
-import AnimatedSelect from "../../components/ui/AnimatedSelect";
+import AnimatedSelect from "../../components/user/ui/AnimatedSelect";
 
 const AdminReports = () => {
   const [loading, setLoading] = useState(false);

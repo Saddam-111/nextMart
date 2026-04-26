@@ -1,18 +1,18 @@
-﻿import React, { useContext } from 'react';
+import React, { useContext } from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
-import Registration from './pages/Registration';
-import Login from './pages/Login';
-import Home from './pages/Home';
-import About from './pages/About';
-import Collection from './pages/Collection';
-import Product from './pages/Product';
-import Contact from './pages/Contact';
-import Cart from './pages/Cart';
-import Orders from './pages/Orders';
-import Wishlist from './pages/Wishlist';
-import Profile from './pages/Profile';
-import ProductDetails from './pages/ProductDetails';
-import CheckOut from './pages/CheckOut';
+import Registration from './pages/user/Registration';
+import Login from './pages/user/Login';
+import Home from './pages/user/Home';
+import About from './pages/user/About';
+import Collection from './pages/user/Collection';
+import Product from './pages/user/Product';
+import Contact from './pages/user/Contact';
+import Cart from './pages/user/Cart';
+import Orders from './pages/user/Orders';
+import Wishlist from './pages/user/Wishlist';
+import Profile from './pages/user/Profile';
+import ProductDetails from './pages/user/ProductDetails';
+import CheckOut from './pages/user/CheckOut';
 import AdminLogin from './pages/admin/AdminLogin';
 import AdminDashboard from './pages/admin/AdminDashboard';
 import AdminProducts from './pages/admin/AdminProducts';
@@ -23,8 +23,8 @@ import AdminUsers from './pages/admin/AdminUsers';
 import AdminReports from './pages/admin/AdminReports';
 import AdminInvoice from './pages/admin/AdminInvoice';
 import UserReturns from './pages/user/Returns';
-import { userDataContext } from './context/UserContext';
-import { AdminProvider, useAdmin } from './context/AdminContext';
+import { userDataContext } from './context/user/UserContext';
+import { AdminProvider, useAdmin } from './context/admin/AdminContext';
 
 
 const ProtectedRoute = ({ children }) => {

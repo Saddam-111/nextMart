@@ -10,7 +10,7 @@ import {
   FiTrendingUp,
   FiTrendingDown,
 } from "react-icons/fi";
-import AdminLayout from "../../components/layout/AdminLayout";
+import AdminLayout from "../../components/admin/layout/AdminLayout";
 
 const AdminDashboard = () => {
   const [dashboardData, setDashboardData] = useState(null);

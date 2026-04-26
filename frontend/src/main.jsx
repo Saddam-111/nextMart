@@ -2,11 +2,11 @@ import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import "./index.css";
 import App from "./App.jsx";
-import AuthContext from "./context/AuthContext.jsx";
-import UserContext from "./context/UserContext.jsx";
-import ShopContext from "./context/ShopContext.jsx";
-import { WishlistProvider } from "./context/WishlistContext.jsx";
-import { AdminProvider } from "./context/AdminContext.jsx";
+import AuthContext from "./context/user/AuthContext.jsx";
+import UserContext from "./context/user/UserContext.jsx";
+import ShopContext from "./context/user/ShopContext.jsx";
+import { WishlistProvider } from "./context/user/WishlistContext.jsx";
+import { AdminProvider } from "./context/admin/AdminContext.jsx";
 
 createRoot(document.getElementById("root")).render(
     <AdminProvider>

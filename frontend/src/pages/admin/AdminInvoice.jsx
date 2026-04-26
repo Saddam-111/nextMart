@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
+import axios from "axios";
 import { motion } from "framer-motion";
 import {
   FiDownload,
@@ -7,7 +8,7 @@ import {
   FiArrowLeft,
   FiPackage,
 } from "react-icons/fi";
-import AdminLayout from "../../components/layout/AdminLayout";
+import AdminLayout from "../../components/admin/layout/AdminLayout";
 
 const AdminInvoice = () => {
   const { orderId } = useParams();

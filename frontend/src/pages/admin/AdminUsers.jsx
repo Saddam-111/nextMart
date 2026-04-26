@@ -10,9 +10,9 @@ import {
   FiUserCheck,
 } from "react-icons/fi";
 import { FaBan } from "react-icons/fa";
-import AdminLayout from "../../components/layout/AdminLayout";
+import AdminLayout from "../../components/admin/layout/AdminLayout";
 
-import AnimatedSelect from "../../components/ui/AnimatedSelect";
+import AnimatedSelect from "../../components/user/ui/AnimatedSelect";
 
 const AdminUsers = () => {
   const [users, setUsers] = useState([]);

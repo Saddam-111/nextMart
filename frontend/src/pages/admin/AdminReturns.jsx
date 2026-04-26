@@ -9,9 +9,9 @@ import {
   FiXCircle,
   FiClock,
 } from "react-icons/fi";
-import AdminLayout from "../../components/layout/AdminLayout";
+import AdminLayout from "../../components/admin/layout/AdminLayout";
 
-import AnimatedSelect from "../../components/ui/AnimatedSelect";
+import AnimatedSelect from "../../components/user/ui/AnimatedSelect";
 
 const AdminReturns = () => {
   const [returns, setReturns] = useState([]);

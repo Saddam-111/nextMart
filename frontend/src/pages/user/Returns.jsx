@@ -10,8 +10,8 @@ import {
   FiRefreshCw,
   FiDownload,
 } from "react-icons/fi";
-import Navbar from "../../components/Navbar";
-import Footer from "../../components/Footer";
+import Navbar from "../../components/user/Navbar";
+import Footer from "../../components/user/Footer";
 
 const Returns = () => {
   const [returns, setReturns] = useState([]);
@@ -144,20 +144,20 @@ const Returns = () => {
     <>
       <Navbar />
       <div className="min-h-screen bg-[#fdf8f3] py-12">
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="max-w-4xl mt-6 mx-auto px-4 sm:px-6 lg:px-8">
           {/* Header */}
-          <div className="flex items-center justify-between mb-8 relative">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-6 mb-8 relative">
             <button 
               onClick={() => window.history.back()} 
-              className="absolute -left-12 top-1/2 -translate-y-1/2 p-2 text-[#7a6b54] hover:text-[#e4a4bd] hidden md:block"
+              className="absolute -left-12 top-1/2 -translate-y-1/2 p-2 text-[#7a6b54] hover:text-[#e4a4bd] hidden lg:block"
             >
-              ← Back
+            Back
             </button>
-            <div>
-              <h1 className="text-3xl font-display font-bold text-[#262626]">
+            <div className="text-center pl-4 sm:text-left">
+              <h1 className="text-2xl sm:text-3xl font-display font-bold text-[#262626]">
                 Returns & Refunds
               </h1>
-              <p className="text-[#7a6b54] mt-1">
+              <p className="text-[#7a6b54] mt-1 text-sm sm:text-base">
                 Request returns for delivered orders
               </p>
             </div>
@@ -165,7 +165,7 @@ const Returns = () => {
               whileHover={{ scale: 1.03 }}
               whileTap={{ scale: 0.97 }}
               onClick={() => handleOpenModal()}
-              className="organic-btn bg-[#e4a4bd] text-white hover:bg-[#d494ad] flex items-center gap-2"
+              className="organic-btn bg-[#e4a4bd] text-white hover:bg-[#d494ad] flex items-center justify-center gap-2 w-full sm:w-auto"
             >
               <FiRefreshCw size={16} />
               New Return Request
@@ -219,10 +219,10 @@ const Returns = () => {
                   className="bg-white rounded-2xl overflow-hidden organic-card"
                 >
                   <div className="p-6">
-                    <div className="flex items-start justify-between mb-4">
+                    <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-4 mb-4">
                       <div>
-                        <div className="flex items-center gap-2 mb-1">
-                          <h3 className="font-display font-semibold text-[#262626]">
+                        <div className="flex flex-wrap items-center gap-2 mb-1">
+                          <h3 className="font-display font-semibold text-[#262626] break-all">
                             {order.orderId}
                           </h3>
                           {getStatusIcon(order.returnRequest?.status)}
@@ -232,7 +232,7 @@ const Returns = () => {
                         </p>
                       </div>
                       <span
-                        className={`px-3 py-1 text-sm rounded-full font-medium flex items-center gap-1.5 ${getStatusColor(
+                        className={`px-3 py-1 text-sm rounded-full font-medium flex items-center gap-1.5 w-fit ${getStatusColor(
                           order.returnRequest?.status
                         )}`}
                       >
@@ -241,7 +241,7 @@ const Returns = () => {
                     </div>
 
                     {/* Items */}
-                    <div className="flex gap-2 mb-4">
+                    <div className="flex flex-wrap gap-2 mb-4">
                       {order.items?.slice(0, 4).map((item, idx) => (
                         <div
                           key={idx}
