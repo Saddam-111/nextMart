@@ -20,6 +20,7 @@ orderRouter.post('/userOrder', isAuth, userOrder)
 orderRouter.post('/placeOrder', isAuth, placeOrder)
 orderRouter.post('/razorpay', isAuth, placeOrderRazorpay)
 orderRouter.post('/verifyrazorpay', isAuth, verifyRazorpay)
+orderRouter.get('/:orderId', isAuth, getOrderDetails)
 
 // Admin routes
 orderRouter.get('/orderList', adminAuth, allOrders)
@@ -28,4 +29,3 @@ orderRouter.post('/status', adminAuth, updateStatus)
 // Enhanced admin routes
 orderRouter.get('/all', adminAuth, getAllOrders)
 orderRouter.put('/:orderId/status', adminAuth, updateOrderStatus)
-orderRouter.get('/:orderId', adminAuth, getOrderDetails)
