@@ -10,7 +10,6 @@ const Home = () => {
   return (
     <div className="min-h-screen w-full bg-gray-50">
       <Navbar />
-      {/* Add Hero section or content here */}
       <Hero />
       <Product />
       <OurPolicy />
